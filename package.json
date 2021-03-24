@@ -1,0 +1,24 @@
+{
+  "name": "poesiaeventual_bot",
+  "version": "1.0.0",
+  "description": "Bot de Telegram para leer poesía.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonasdamher/PoesiaEventual_bot.git"
+  },
+  "keywords": [
+    "poesía",
+    "bot",
+    "Telegram"
+  ],
+  "author": "Jonás Damián Hernández",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonasdamher/PoesiaEventual_bot/issues"
+  },
+  "homepage": "https://github.com/jonasdamher/PoesiaEventual_bot#readme"
+}
