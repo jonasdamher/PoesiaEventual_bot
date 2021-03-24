@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/jonasdamher/PoesiaEventual_bot/issues"
   },
-  "homepage": "https://github.com/jonasdamher/PoesiaEventual_bot#readme"
+  "homepage": "https://github.com/jonasdamher/PoesiaEventual_bot#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5",
+    "dotenv": "^8.2.0",
+    "node-telegram-bot-api": "^0.51.0"
+  }
 }
