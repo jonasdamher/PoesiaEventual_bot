@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,7 @@
     "node-telegram-bot-api": "^0.51.0"
   },
   "devDependencies": {
+    "cmake-js": "^6.1.0",
     "nodemon": "^2.0.7"
   }
 }
