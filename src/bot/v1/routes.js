@@ -2,9 +2,9 @@
 
 const bot = require('./config/bot')
 
-const generic = require('./functions/generic')
-const author = require('./functions/author')
-const poem = require('./functions/poem')
+const generic = require('./controller/generic')
+const author = require('./controller/author')
+const poem = require('./controller/poem')
 
 bot.onText(/^\/iniciar|\/start$/, generic.start);
 bot.onText(/^\/ayuda$/, generic.help);
