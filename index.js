@@ -6,5 +6,5 @@ dotenv.config()
 // for warning message deprecated of api telegram.
 process.env.NTBA_FIX_319 = 1;
 
-const routes ='./src/'+process.env.VERSION+'/routes'
+const routes = './src/bot/' + process.env.VERSION + '/routes'
 require(routes)
