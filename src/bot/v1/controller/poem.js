@@ -147,8 +147,13 @@ function createPoemList(userId, poemTitle, data) {
         list.push([{ text: messagePagination, callback_data: url }])
     }
 
+    let message = ''
+    if (!poemTitle.includes('?perpage=')) {
+        message = 'He encontrado ' + pagination.total + ' coincidencias relacionadas con el título *' + filterPoemTitle + '*,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
     // Add message and options
-    let message = 'He encontrado ' + pagination.total + ' coincidencias relacionadas con el título *' + filterPoemTitle + '*,\nquizás estas buscando:'
     let options = {
         parse_mode: 'Markdown',
         reply_to_message_id: userId,
@@ -181,7 +186,13 @@ function createAuthorsList(userId, author, data) {
     }
 
     // Add message and options
-    let message = 'He encontrado ' + data.pagination.total + ' coincidencias,\nquizás estas buscando:'
+    let message = ''
+    if (!author.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' coincidencias,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
+
     let options = {
         parse_mode: 'Markdown',
         reply_to_message_id: userId,
@@ -212,8 +223,13 @@ function createPoemsAuthorList(msg, authorId, data) {
         list.push([{ text: messagePagination, callback_data: url }])
     }
 
+    let message = ''
+    if (!authorId.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' poemas,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
     // Add message and options
-    let message = 'He encontrado ' + data.pagination.total + ' poemas,\nquizás estas buscando:'
     let options = {
         parse_mode: 'Markdown',
         reply_to_message_id: msg,

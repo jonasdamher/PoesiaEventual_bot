@@ -145,8 +145,14 @@ function createAuthorsList(userId, authorName, data) {
         list.push([{ text: messagePagination, callback_data: url }])
     }
 
+    let message = ''
+    if (!authorName.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
+
     // Add message and options
-    let message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
     let options = {
         parse_mode: 'Markdown',
         reply_to_message_id: userId,
