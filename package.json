@@ -4,7 +4,6 @@
   "description": "Bot de Telegram para leer poesía.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
   },
   "repository": {
     "type": "git",
