@@ -4,7 +4,6 @@
   "description": "Bot de Telegram para leer poesía.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
     "start": "node index.js"
   },
   "repository": {
@@ -27,8 +26,5 @@
     "dotenv": "^8.2.0",
     "node-telegram-bot-api": "^0.51.0"
   },
-  "devDependencies": {
-    "cmake-js": "^6.1.0",
-    "nodemon": "^2.0.7"
-  }
+  "devDependencies": {}
 }
