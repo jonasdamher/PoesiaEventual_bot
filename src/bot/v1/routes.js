@@ -1,7 +1,6 @@
 'use strict';
 
 const bot = require('./config/bot')
-
 const generic = require('./controller/generic')
 const author = require('./controller/author')
 const poem = require('./controller/poem')
