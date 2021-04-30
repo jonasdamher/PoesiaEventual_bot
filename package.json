@@ -7,7 +7,7 @@
     "postinstall": "netlify-lambda install",
     "buildNetlify": "netlify-lambda build functions",
     "devNetlify": "netlify-lambda serve functions",
-    "start": "node ./functions/server.js"
+    "start": "node ./functions/server_bot.js"
   },
   "repository": {
     "type": "git",
