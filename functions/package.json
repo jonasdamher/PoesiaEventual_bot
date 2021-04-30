@@ -1,0 +1,17 @@
+{
+    "name": "poesiaeventual_bot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "bot.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Jonás Damián Hernández",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "dotenv": "^8.2.0",
+        "node-telegram-bot-api": "^0.51.0"
+    }
+}
