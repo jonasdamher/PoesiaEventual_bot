@@ -7,7 +7,5 @@ dotenv.config()
 process.env.NTBA_FIX_319 = 1;
 
 const routes = './src/bot/' + process.env.VERSION + '/routes'
-const server = './src/bot/' + process.env.VERSION + '/server_bot'
-
+ 
 require(routes)
-require(server)
