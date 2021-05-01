@@ -11,12 +11,19 @@ module.exports = {
 
 async function discover(msg) {
 
-    exports.handler = async event => {
-        return axios.get('poem/random').then(res => {
+    exports.handler = async (event, context, callback) => {
+        
+        callback(null, {
+            statusCode: 200,
+            body: ''
+        })
+
+        axios.get('poem/random').then(res => {
 
             let poem = res.data
             let message = poem.title + '\n' + poem.text + '\nAutor: ' + poem.author.name
             msg.reply(message)
+            callback()
         }).catch(err => {
 
             msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
