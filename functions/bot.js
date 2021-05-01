@@ -3,11 +3,9 @@
 const generic = require('./actions/generic')
 // const author = require('./controller/author')
 // const poem = require('./controller/poem')
-
 const bot = require('./config/bot')
 
 bot.start(ctx => generic.start(ctx))
-
 bot.help((ctx) =>  generic.help(ctx))
 
 // bot.onText(/^\/iniciar|\/start$/, generic.start);
@@ -19,7 +17,6 @@ bot.help((ctx) =>  generic.help(ctx))
 // bot.onText(/^\/poema([\s]{1,}.+[a-zA-Z-0-9])/, poem.poem)
 // bot.onText(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, poem.poems)
 // bot.onText(/^\/descubrir_poema$/, poem.discoverPoem)
-
 
 exports.handler = async event => {
     try {

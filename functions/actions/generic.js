@@ -7,7 +7,7 @@ module.exports = {
 
 async function start(ctx) {
 
-    let startMessage = `Bienvenido ${msg.chat.first_name}.\nAquí puedes consultar mas de *12.000* poemas de mas de *1.300* autores.`
+    let startMessage = `Bienvenido ${ctx.chat.first_name}.\nAquí puedes consultar mas de *12.000* poemas de mas de *1.300* autores.`
     ctx.reply(startMessage)
 }
 
