@@ -1,22 +1,20 @@
 'use strict';
 
 const generic = require('./actions/generic')
-// const author = require('./controller/author')
-// const poem = require('./controller/poem')
+const author = require('./actions/author')
+const poem = require('./actions/poem')
+
 const bot = require('./config/bot')
 
-bot.start(ctx => generic.start(ctx))
-bot.help((ctx) =>  generic.help(ctx))
+bot.on(/^\/iniciar|\/start$/, msg => generic.start(msg))
+bot.on(/^\/ayuda$/, msg => generic.help(msg))
 
-// bot.onText(/^\/iniciar|\/start$/, generic.start);
-// bot.onText(/^\/ayuda$/, generic.help);
+bot.on(/^\/descubrir_autor$/, msg => author.discover(msg))
+// bot.on(/^\/autor([\s]{1,}.+[a-zA-Z-0-9])/, msg => author.get(msg))
 
-// bot.onText(/^\/autor([\s]{1,}.+[a-zA-Z-0-9])/, author.author)
-// bot.onText(/^\/descubrir_autor$/, author.discoverAuthor)
-
-// bot.onText(/^\/poema([\s]{1,}.+[a-zA-Z-0-9])/, poem.poem)
-// bot.onText(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, poem.poems)
-// bot.onText(/^\/descubrir_poema$/, poem.discoverPoem)
+bot.on(/^\/descubrir_poema$/, msg => poem.discover(msg))
+// bot.on(/^\/poema([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.poem(msg))
+// bot.on(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, poem.poems)
 
 exports.handler = async event => {
     try {

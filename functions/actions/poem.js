@@ -1,28 +1,26 @@
 'use strict';
 
-const bot = require('../config/bot')
 const axios = require('../config/axios')
-
 const helper = require('../helpers/functions')
 
 module.exports = {
-    discoverPoem,
-    poem,
-    poems
+    discover
+    // poem,
+    // poems
 }
 
-async function discoverPoem(msg) {
+async function discover(msg) {
 
     axios.get('poem/random').then(res => {
 
         let poem = res.data
-        helper.sendMessage(msg.chat.id, '*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
+        msg.reply('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
     }).catch(err => {
 
-        helper.sendMessage(msg.chat.id, 'Hubo un error al mostrar la información, disculpa las molestias.')
+        msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
     })
 
-    helper.sendMessage(msg.chat.id, 'Espera un momento...\nBuscando un poema interesante para ti.')
+    msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
 }
 
 async function poems(msg, match) {
