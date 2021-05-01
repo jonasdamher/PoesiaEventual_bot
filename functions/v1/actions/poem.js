@@ -22,7 +22,7 @@ async function discover(msg) {
     }).catch(err => {
 
         msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
-    });
+    })
 }
 
 // async function poems(msg, match) {

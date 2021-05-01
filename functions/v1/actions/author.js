@@ -10,7 +10,9 @@ module.exports = {
 
 async function discover(msg) {
 
-    axios.get('author/random').then(author => {
+    msg.reply('Espera un momento...\nBuscando un autor interesante para ti.')
+
+    return axios.get('author/random').then(author => {
 
         let authorName = author.data.name
         searchAuthorWiki(msg, authorName)
@@ -18,8 +20,6 @@ async function discover(msg) {
 
         msg.reply('Hubo un error al tratar de descubrir un autor, disculpa las molestias.')
     })
-
-    msg.reply('Espera un momento...\nBuscando un autor interesante para ti.')
 }
 
 // async function get(msg, match) {
@@ -133,7 +133,7 @@ async function searchAuthorWiki(msg, authorName, i = 0) {
 
     const url = urls[i] + encodeURI(authorName)
 
-    axios.get(url).then(res => {
+    return axios.get(url).then(res => {
 
         let page = res.data.query.pages
         let key = Object.keys(page)[0]
