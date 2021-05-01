@@ -28,6 +28,4 @@ function addParams(search) {
     return encodeURI(params)
 }
 
-function sendMessage(userId, message, options = { parse_mode: 'Markdown' }) {
-    bot.sendMessage(userId, message, options)
-}
+ 

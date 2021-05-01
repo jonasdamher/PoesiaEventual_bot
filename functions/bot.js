@@ -1,29 +1,14 @@
 'use strict';
 
-const dotenv = require('dotenv')
-dotenv.config()
-
-const { Telegraf } = require('telegraf')
-const bot = new Telegraf(process.env.API_KEY_TELEGRAM)
-
-bot.start((ctx) => ctx.reply('Welcome'))
-bot.help((ctx) => ctx.reply('Send me a sticker'))
-
-exports.handler = async event => {
-    try {
-        await bot.handleUpdate(JSON.parse(event.body));
-        return { statusCode: 200, body: '' };
-    } catch (e) {
-        console.log(e)
-        return { statusCode: 400, body: 'This endpoint is meant for bot and telegram communication' };
-    }
-}
-
-// const bot = require('./config/bot')
-
-// const generic = require('./controller/generic')
+const generic = require('./actions/generic')
 // const author = require('./controller/author')
 // const poem = require('./controller/poem')
+
+const bot = require('./config/bot')
+
+bot.start(ctx => generic.start(ctx))
+
+bot.help((ctx) =>  generic.help(ctx))
 
 // bot.onText(/^\/iniciar|\/start$/, generic.start);
 // bot.onText(/^\/ayuda$/, generic.help);
@@ -35,4 +20,13 @@ exports.handler = async event => {
 // bot.onText(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, poem.poems)
 // bot.onText(/^\/descubrir_poema$/, poem.discoverPoem)
 
-// module.exports = bot
+
+exports.handler = async event => {
+    try {
+        await bot.handleUpdate(JSON.parse(event.body));
+        return { statusCode: 200, body: '' };
+    } catch (e) {
+        console.log(e)
+        return { statusCode: 400, body: 'This endpoint is meant for bot and telegram communication' };
+    }
+}

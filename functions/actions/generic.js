@@ -1,19 +1,18 @@
 'use strict';
 
-const helper = require('../helpers/functions')
-
 module.exports = {
     start,
     help
 }
 
-async function start(msg) {
+async function start(ctx) {
+
     let startMessage = `Bienvenido ${msg.chat.first_name}.\nAquí puedes consultar mas de *12.000* poemas de mas de *1.300* autores.`
-    helper.sendMessage(msg.chat.id, startMessage)
+    ctx.reply(startMessage)
 }
 
-async function help(msg) {
-    
+async function help(ctx) {
+
     let welcomeMessage = `Comandos:\n
 Muestra información sobre un autor. 
 /autor Mario Benedetti\n
@@ -26,5 +25,5 @@ Muestra información de un autor aleatorio.
 Muestra un poema aleatorio. 
 /descubrir_poema
     `
-    helper.sendMessage(msg.chat.id, welcomeMessage,{parse_mode:'HTML'})
+    ctx.reply(welcomeMessage)
 }

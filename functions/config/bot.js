@@ -1,5 +1,4 @@
 'use strict';
-
-const TelegramBot = require('node-telegram-bot-api')
-const bot = new TelegramBot(process.env.API_KEY_TELEGRAM, { polling: true })
+const { Telegraf } = require('telegraf')
+const bot = new Telegraf(process.env.API_KEY_TELEGRAM)
 module.exports = bot
