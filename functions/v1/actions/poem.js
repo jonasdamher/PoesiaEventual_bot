@@ -11,25 +11,26 @@ module.exports = {
 
 async function discover(msg) {
 
-    axios.get('poem/random').then(res => {
+    exports.handler = (event, context, callback) => {
+        return axios.get('poem/random').then(res => {
 
-        let poem = res.data
-        let message = poem.title + '\n' + poem.text + '\nAutor: ' + poem.author.name
-        msg.reply(message)
+            let poem = res.data
+            let message = poem.title + '\n' + poem.text + '\nAutor: ' + poem.author.name
+            msg.reply(message)
 
-        callback(null, {
-            statusCode: 200,
-            body: JSON.stringify(res.data)
-        });
+            callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(res.data)
+            });
+        })
+            .catch(err => {
 
-    }).catch(err => {
+                msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
+                callback(err);
+            });
 
-        msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
-
-        callback(err);
-    });
-
-    msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
+        msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
+    };
 }
 
 // async function poems(msg, match) {
