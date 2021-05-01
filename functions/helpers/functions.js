@@ -6,8 +6,7 @@ module.exports = {
     filterTextForPagination,
     getDomainName,
     isId,
-    addParams,
-    sendMessage
+    addParams
 }
 
 function filterTextForPagination(filterPoemTitle) {
@@ -27,5 +26,3 @@ function addParams(search) {
     let params = search.includes('?perpage=') && search.includes('&page=') ? search : search + '?perpage=4&page=1'
     return encodeURI(params)
 }
-
- 
