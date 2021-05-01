@@ -20,7 +20,7 @@ async function discover(msg) {
         msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
     })
 
-    // msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
+    msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
 }
 
 // async function poems(msg, match) {
