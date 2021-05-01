@@ -6,8 +6,8 @@ const generic = require('./actions/generic')
 
 const bot = require('./config/bot')
 
-bot.command(/^\/iniciar|\/start$/, msg => generic.start(msg))
-bot.command(/^\/ayuda$/, msg => generic.help(msg))
+bot.command(/^\/iniciar|\/start$/, ctx => generic.start(ctx))
+bot.command(/^\/ayuda$/, ctx => generic.help(ctx))
 
 // bot.command(/^\/descubrir_autor$/, msg => author.discover(msg))
 // bot.on(/^\/autor([\s]{1,}.+[a-zA-Z-0-9])/, msg => author.get(msg))
