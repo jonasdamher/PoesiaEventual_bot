@@ -15,7 +15,7 @@ async function discover(msg) {
     return axios.get('author/random').then(author => {
 
         let authorName = author.data.name
-        searchAuthorWiki(msg, authorName)
+        return searchAuthorWiki(msg, authorName)
     }).catch(err => {
 
         msg.reply('Hubo un error al tratar de descubrir un autor, disculpa las molestias.')
