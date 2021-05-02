@@ -92,18 +92,11 @@ async function authorSearch(msg, authorName) {
             let { message, list } = createAuthorsList(authorName, data)
 
             bot.on('callback_query', (ctx) => {
-                // Explicit usage
-                ctx.telegram.answerCbQuery(ctx.callbackQuery.id)
-
-                // Using context shortcut
+                console.log('callbackQuery ye ' + ctx.match[1])
+                // return get(msg)
                 ctx.answerCbQuery()
             })
 
-            // bot.removeListener('callback_query').on('callback_query', res => {
-            //     console.log('callbackQuery ye '+res.data)
-            //     // msg.match[1] = ['', res.inlineQuery.query.trim()]
-            //     // return get(msg)
-            // })
             return msg.reply(message, Markup.inlineKeyboard(list))
 
         } else if (!data.authors.length) {
