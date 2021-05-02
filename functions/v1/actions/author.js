@@ -1,6 +1,7 @@
 'use strict';
 
-const { Markup, bot } = require('../config/bot')
+const { Markup } = require('telegraf')
+const bot = require('../config/bot')
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
 
@@ -91,7 +92,7 @@ async function authorSearch(msg, authorName) {
             let { message, list } = createAuthorsList(authorName, data)
 
             bot.removeListener('callback_query').on('callback_query', res => {
-                console.log('callbackQuery ye')
+                console.log('callbackQuery ye '+res.data)
                 // msg.match[1] = ['', res.inlineQuery.query.trim()]
                 // return get(msg)
             })
