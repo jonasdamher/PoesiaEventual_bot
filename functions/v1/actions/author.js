@@ -1,4 +1,5 @@
 'use strict';
+const { Telegraf, Markup } = require('telegraf')
 
 const bot = require('../config/bot')
 const axios = require('../config/axios')
@@ -47,18 +48,7 @@ async function sendAuthorById(msg, id) {
 function createAuthorsList(authorName, data) {
 
     // add authors
-    let list = data.authors.map(author => {
-        return {
-            id: author._id,
-            title: author.name,
-            type: 'article',
-            input_message_content: {
-                message_text: author.name,
-                parse_mode: 'Markdown'
-            }
-        }
-    })
-
+    let list = data.authors.map(author => Markup.button.callback(author.name, author._id))
     // add pagination
     let filterAuthorName = helper.filterTextForPagination(authorName)
 
@@ -70,15 +60,7 @@ function createAuthorsList(authorName, data) {
         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
 
-        list.push({
-            id: url,
-            title: messagePagination,
-            type: 'article',
-            input_message_content: {
-                message_text: messagePagination,
-                parse_mode: 'Markdown'
-            }
-        })
+        list.push(Markup.button.callback(messagePagination, url))
     }
 
     let message = ''
@@ -110,8 +92,10 @@ async function authorSearch(msg, authorName) {
 
             let { message, list } = createAuthorsList(authorName, data)
 
-            msg.reply(message,list)
- 
+            msg.reply(message,
+                Markup.inlineKeyboard(list).oneTime().resize()
+            )
+
             // bot.removeListener('callback_query')
             // bot.on('callback_query', res => {
             //     msg.match[1] = ['', res.inlineQuery.query.trim()]
