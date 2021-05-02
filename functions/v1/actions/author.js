@@ -1,8 +1,8 @@
 'use strict';
 
 const bot = require('../config/bot')
-
 const axios = require('../config/axios')
+
 const helper = require('../helpers/functions')
 
 module.exports = {
@@ -20,7 +20,7 @@ async function discover(msg) {
         return searchAuthorWiki(msg, authorName)
     }).catch(err => {
 
-        msg.reply('Hubo un error al tratar de descubrir un autor, disculpa las molestias.')
+        return msg.reply('Hubo un error al tratar de descubrir un autor, disculpa las molestias.')
     })
 }
 
@@ -40,7 +40,7 @@ async function sendAuthorById(msg, id) {
     return axios.get('author/get/' + id).then(res => {
         return searchAuthorWiki(msg, res.data.name)
     }).catch(err => {
-        msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
     })
 }
 
@@ -113,18 +113,19 @@ async function authorSearch(msg, authorName) {
             msg.reply(message)
             msg.answerInlineQuery(list)
 
-            return bot.removeListener('callback_query').on('callback_query', res => {
+            bot.removeListener('callback_query')
+            return bot.on('callback_query', res => {
                 msg.match[1] = ['', res.data.trim()]
                 return get(msg)
             })
 
         } else if (!data.authors.length) {
 
-            msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
+            return msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
         }
 
     }).catch(err => {
-        msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
     })
 }
 
@@ -160,10 +161,10 @@ async function searchAuthorWiki(msg, authorName, i = 0) {
             if (information.length > 0) {
                 message = information
             }
-            msg.reply(message)
+            return msg.reply(message)
         }
 
     }).catch(e => {
-        msg.reply('Hubo un error al buscar información sobre *' + authorName + '*, disculpe las molestias.')
+        return msg.reply('Hubo un error al buscar información sobre *' + authorName + '*, disculpe las molestias.')
     })
 }
