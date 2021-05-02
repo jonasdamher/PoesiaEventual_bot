@@ -24,7 +24,7 @@ async function discover(msg) {
 
 async function get(msg, match) {
 
-    const data = match.trim()
+    const data = match[1].trim()
     msg.reply(data)
 
     // if (helper.isId(data)) {
