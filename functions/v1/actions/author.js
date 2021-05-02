@@ -111,10 +111,11 @@ async function authorSearch(msg, authorName) {
             let { message, list } = createAuthorsList(authorName, data)
 
             msg.reply(message)
+            msg.answerCbQuery(list)
 
-            return bot.removeListener('callback_query').on('callback_query', res => {
+            bot.removeListener('callback_query')
+            bot.on('callback_query', res => {
                 msg.match[1] = ['', res.inlineQuery.query.trim()]
-                res.answerInlineQuery(list)
                 return get(msg)
             })
 
