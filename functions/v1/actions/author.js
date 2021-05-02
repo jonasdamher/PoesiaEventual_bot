@@ -92,14 +92,13 @@ async function authorSearch(msg, authorName) {
 
             let { message, list } = createAuthorsList(authorName, data)
 
-            msg.reply(message, Markup.inlineKeyboard(list))
+            bot.removeListener('callback_query')
+            bot.on('callback_query', res => {
+                msg.match[1] = ['', res.inlineQuery.query.trim()]
 
-            // bot.removeListener('callback_query')
-            // bot.on('callback_query', res => {
-            //     msg.match[1] = ['', res.inlineQuery.query.trim()]
-
-            //     return get(msg)
-            // })
+                return get(msg)
+            })
+            return msg.reply(message, Markup.inlineKeyboard(list))
 
         } else if (!data.authors.length) {
 
