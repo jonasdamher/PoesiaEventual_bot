@@ -48,7 +48,7 @@ function createAuthorsList(authorName, data) {
 
     // add authors
     let list = data.authors.map(author => {
-        return [{
+        return {
             id: author._id,
             title: author.name,
             type: 'article',
@@ -56,7 +56,7 @@ function createAuthorsList(authorName, data) {
                 message_text: author.name,
                 parse_mode: 'HTML'
             }
-        }]
+        }
     })
 
     // add pagination
@@ -70,7 +70,7 @@ function createAuthorsList(authorName, data) {
         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
 
-        list.push([{
+        list.push({
             id: url,
             title: messagePagination,
             type: 'article',
@@ -78,7 +78,7 @@ function createAuthorsList(authorName, data) {
                 message_text: messagePagination,
                 parse_mode: 'HTML'
             }
-        }])
+        })
     }
 
     let message = ''
