@@ -1,7 +1,5 @@
 'use strict';
 
-const bot = require('../config/bot')
-
 module.exports = {
     filterTextForPagination,
     getDomainName,
