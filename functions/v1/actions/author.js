@@ -4,8 +4,8 @@ const axios = require('../config/axios')
 const helper = require('../helpers/functions')
 
 module.exports = {
-    discover
-    // get
+    discover,
+    get
 }
 
 async function discover(msg) {
@@ -22,104 +22,93 @@ async function discover(msg) {
     })
 }
 
-// async function get(msg, match) {
+async function get(msg, match) {
 
-//     const data = match[1].trim()
+    const data = match[1].trim()
 
-//     if (helper.isId(data)) {
+    if (helper.isId(data)) {
+        return sendAuthorById(msg, data)
+    } else {
+        return authorSearch(msg, data)
+    }
+}
 
-//         sendAuthorById(msg, data)
-//     } else {
+async function sendAuthorById(msg, id) {
 
-//         authorSearch(msg, data)
-//     }
-// }
+    return axios.get('author/get/' + id).then(res => {
+        return searchAuthorWiki(msg, res.data.name)
+    }).catch(err => {
+        msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+    })
+}
 
-// async function sendAuthorById(msg, id) {
+function createAuthorsList(authorName, data) {
 
-//     axios.get('author/get/' + id).then(res => {
+    // add authors
+    let list = data.authors.map(author => [{ text: author.name, callback_data: author._id }])
 
-//         searchAuthorWiki(msg.chat.id, res.data.name)
-//     }).catch(err => {
+    // add pagination
+    let filterAuthorName = helper.filterTextForPagination(authorName)
 
-//         helper.sendMessage(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
-//     })
-// }
+    let currentPage = data.pagination.page
 
-// function createAuthorsList(userId, authorName, data) {
+    if (currentPage < data.pagination.lastPage) {
+        ++currentPage
 
-//     // add authors
-//     let list = data.authors.map(author => [{ text: author.name, callback_data: author._id }])
+        let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+        let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
 
-//     // add pagination
-//     let filterAuthorName = helper.filterTextForPagination(authorName)
+        list.push([{ text: messagePagination, callback_data: url }])
+    }
 
-//     let currentPage = data.pagination.page
+    let message = ''
+    if (!authorName.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
 
-//     if (currentPage < data.pagination.lastPage) {
-//         ++currentPage
 
-//         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
-//         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+    return { message, list }
+}
 
-//         list.push([{ text: messagePagination, callback_data: url }])
-//     }
+async function authorSearch(msg, authorName) {
 
-//     let message = ''
-//     if (!authorName.includes('?perpage=')) {
-//         message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
-//     } else {
-//         message = 'Página ' + data.pagination.page + ':'
-//     }
+    let search = helper.addParams(authorName)
 
-//     // Add message and options
-//     let options = {
-//         parse_mode: 'Markdown',
-//         reply_to_message_id: userId,
-//         reply_markup: {
-//             remove_keyboard: true,
-//             inline_keyboard: list
-//         }
-//     }
+    return axios.get('author/search/' + search).then(res => {
 
-//     return { message, options }
-// }
-// async function authorSearch(msg, authorName) {
+        let data = res.data
 
-//     let search = helper.addParams(authorName)
+        if (data.authors.length == 1 &&
+            data.pagination.page == 1 &&
+            data.pagination.lastPage == 1
+        ) {
 
-//     axios.get('author/search/' + search).then(res => {
+            let authorNameOne = data.authors[0].name
+            return searchAuthorWiki(msg, authorNameOne)
 
-//         let data = res.data
+        } else if (data.authors.length > 0) {
 
-//         if (data.authors.length == 1 &&
-//             data.pagination.page == 1 &&
-//             data.pagination.lastPage == 1
-//         ) {
+            let { message, list } = createAuthorsList(authorName, data)
 
-//             let authorNameOne = data.authors[0].name
-//             searchAuthorWiki(msg.chat.id, authorNameOne)
+            msg.reply(message)
+            msg.answerInlineQuery(list)
 
-//         } else if (data.authors.length > 0) {
+            return bot.removeListener('callback_query').on('callback_query', res => {
+                let currentData = ['', res.data]
+                return author(msg, currentData)
+            })
 
-//             let { message, options } = createAuthorsList(msg, authorName, data)
+        } else if (!data.authors.length) {
 
-//             bot.removeListener('callback_query').on('callback_query', res => {
-//                 let currentData = res.data
-//                 author(msg, ['', currentData])
-//             })
+            msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
+        }
 
-//             helper.sendMessage(msg.chat.id, message, options)
-
-//         } else if (!data.authors.length) {
-
-//             helper.sendMessage(msg.chat.id, 'Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
-//         }
-
-//     }).catch(err => {
-//         helper.sendMessage(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
-//     })
-// }
+    }).catch(err => {
+        msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+    })
+}
 
 async function searchAuthorWiki(msg, authorName, i = 0) {
 
@@ -153,7 +142,6 @@ async function searchAuthorWiki(msg, authorName, i = 0) {
             if (information.length > 0) {
                 message = information
             }
-
             msg.reply(message)
         }
 
