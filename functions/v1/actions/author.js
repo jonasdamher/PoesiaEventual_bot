@@ -92,9 +92,9 @@ async function authorSearch(msg, authorName) {
             let { message, list } = createAuthorsList(authorName, data)
 
             bot.on('callback_query', (ctx) => {
-                console.log(ctx.update.callback_query.data)
-                // return get(msg)
-                ctx.answerCbQuery()
+                msg.match[1] = ctx.update.callback_query.data
+                return get(msg)
+                // ctx.answerCbQuery()
             })
 
             return msg.reply(message, Markup.inlineKeyboard(list))
