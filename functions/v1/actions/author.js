@@ -1,9 +1,7 @@
 'use strict';
-const { Telegraf, Markup } = require('telegraf')
 
-const bot = require('../config/bot')
+const { Markup, bot } = require('../config/bot')
 const axios = require('../config/axios')
-
 const helper = require('../helpers/functions')
 
 module.exports = {
@@ -93,13 +91,12 @@ async function authorSearch(msg, authorName) {
             let { message, list } = createAuthorsList(authorName, data)
 
             bot.removeListener('callback_query').on('callback_query', res => {
-                console.log('callbackQuery')
-                msg.match[1] = ['', res.inlineQuery.query.trim()]
-
-                return get(msg)
+                console.log('callbackQuery ye')
+                // msg.match[1] = ['', res.inlineQuery.query.trim()]
+                // return get(msg)
             })
             return msg.reply(message, Markup.inlineKeyboard(list))
-            
+
         } else if (!data.authors.length) {
 
             return msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')

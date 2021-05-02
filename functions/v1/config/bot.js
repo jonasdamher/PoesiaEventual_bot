@@ -1,4 +1,7 @@
 'use strict';
-const { Telegraf } = require('telegraf')
+const { Telegraf, Markup } = require('telegraf')
 const bot = new Telegraf(process.env.API_KEY_TELEGRAM)
-module.exports = bot
+module.exports = {
+    Markup,
+    bot
+}
