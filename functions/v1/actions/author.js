@@ -25,108 +25,107 @@ async function discover(msg) {
 async function get(msg, match) {
 
     const data = match[1].trim()
+    msg.reply(data)
 
-    if (helper.isId(data)) {
-        return sendAuthorById(msg, data)
-    } else {
-        return authorSearch(msg, data)
-    }
+    // if (helper.isId(data)) {
+    //     return sendAuthorById(msg, data)
+    // } else {
+    //     return authorSearch(msg, data)
+    // }
 }
 
-async function sendAuthorById(msg, id) {
+// async function sendAuthorById(msg, id) {
 
-    return axios.get('author/get/' + id).then(res => {
-        return searchAuthorWiki(msg, res.data.name)
-    }).catch(err => {
-        msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
-    })
-}
+//     return axios.get('author/get/' + id).then(res => {
+//         return searchAuthorWiki(msg, res.data.name)
+//     }).catch(err => {
+//         msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+//     })
+// }
 
-function createAuthorsList(authorName, data) {
+// function createAuthorsList(authorName, data) {
 
-    // add authors
-    let list = data.authors.map(author => {
-        return [{
-            id: author._id,
-            title: author.name,
-            type: 'article',
-            input_message_content: {
-                message_text: author.name,
-                parse_mode: 'HTML'
-            }
-        }]
-    })
+//     // add authors
+//     let list = data.authors.map(author => {
+//         return [{
+//             id: author._id,
+//             title: author.name,
+//             type: 'article',
+//             input_message_content: {
+//                 message_text: author.name,
+//                 parse_mode: 'HTML'
+//             }
+//         }]
+//     })
 
-    // add pagination
-    let filterAuthorName = helper.filterTextForPagination(authorName)
+//     // add pagination
+//     let filterAuthorName = helper.filterTextForPagination(authorName)
 
-    let currentPage = data.pagination.page
+//     let currentPage = data.pagination.page
 
-    if (currentPage < data.pagination.lastPage) {
-        ++currentPage
+//     if (currentPage < data.pagination.lastPage) {
+//         ++currentPage
 
-        let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
-        let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+//         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+//         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
 
-        list.push([{
-            id: url,
-            title: messagePagination,
-            type: 'article',
-            input_message_content: {
-                message_text: messagePagination,
-                parse_mode: 'HTML'
-            }
-        }])
-    }
+//         list.push([{
+//             id: url,
+//             title: messagePagination,
+//             type: 'article',
+//             input_message_content: {
+//                 message_text: messagePagination,
+//                 parse_mode: 'HTML'
+//             }
+//         }])
+//     }
 
-    let message = ''
-    if (!authorName.includes('?perpage=')) {
-        message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
-    } else {
-        message = 'Página ' + data.pagination.page + ':'
-    }
+//     let message = ''
+//     if (!authorName.includes('?perpage=')) {
+//         message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
+//     } else {
+//         message = 'Página ' + data.pagination.page + ':'
+//     }
+//     return { message, list }
+// }
 
+// async function authorSearch(msg, authorName) {
 
-    return { message, list }
-}
+//     let search = helper.addParams(authorName)
 
-async function authorSearch(msg, authorName) {
+//     return axios.get('author/search/' + search).then(res => {
 
-    let search = helper.addParams(authorName)
+//         let data = res.data
 
-    return axios.get('author/search/' + search).then(res => {
+//         if (data.authors.length == 1 &&
+//             data.pagination.page == 1 &&
+//             data.pagination.lastPage == 1
+//         ) {
 
-        let data = res.data
+//             let authorNameOne = data.authors[0].name
+//             return searchAuthorWiki(msg, authorNameOne)
 
-        if (data.authors.length == 1 &&
-            data.pagination.page == 1 &&
-            data.pagination.lastPage == 1
-        ) {
+//         } else if (data.authors.length > 0) {
 
-            let authorNameOne = data.authors[0].name
-            return searchAuthorWiki(msg, authorNameOne)
+//             let { message, list } = createAuthorsList(authorName, data)
 
-        } else if (data.authors.length > 0) {
+//             msg.reply(message)
+//             msg.answerInlineQuery(list)
 
-            let { message, list } = createAuthorsList(authorName, data)
+//             return bot.removeListener('callback_query').on('callback_query', res => {
+//                 let currentData = ['', res.data]
+//                 return author(msg, currentData)
+//             })
 
-            msg.reply(message)
-            msg.answerInlineQuery(list)
+//         } else if (!data.authors.length) {
 
-            return bot.removeListener('callback_query').on('callback_query', res => {
-                let currentData = ['', res.data]
-                return author(msg, currentData)
-            })
+//             msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
+//         }
 
-        } else if (!data.authors.length) {
-
-            msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
-        }
-
-    }).catch(err => {
-        msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
-    })
-}
+//     }).catch(err => {
+//         msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+//     })
+// }
 
 async function searchAuthorWiki(msg, authorName, i = 0) {
 
