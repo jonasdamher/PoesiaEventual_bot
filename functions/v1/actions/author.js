@@ -51,7 +51,11 @@ function createAuthorsList(authorName, data) {
         return {
             id: author._id,
             title: author.name,
-            type: 'article'
+            type: 'article',
+            input_message_content: {
+                message_text: author.name,
+                parse_mode: 'Markdown'
+            }
         }
     })
 
@@ -69,7 +73,11 @@ function createAuthorsList(authorName, data) {
         list.push({
             id: url,
             title: messagePagination,
-            type: 'article'
+            type: 'article',
+            input_message_content: {
+                message_text: messagePagination,
+                parse_mode: 'Markdown'
+            }
         })
     }
 
@@ -102,9 +110,8 @@ async function authorSearch(msg, authorName) {
 
             let { message, list } = createAuthorsList(authorName, data)
 
-            msg.reply(message)
-            msg.answerInlineQuery(list)
-
+            msg.reply(message,list)
+ 
             // bot.removeListener('callback_query')
             // bot.on('callback_query', res => {
             //     msg.match[1] = ['', res.inlineQuery.query.trim()]
