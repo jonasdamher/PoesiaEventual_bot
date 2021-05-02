@@ -4,7 +4,7 @@ const generic = require('./actions/generic')
 const author = require('./actions/author')
 const poem = require('./actions/poem')
 
-const bot = require('../config/bot')
+const bot = require('config/bot')
 
 bot.hears(/^\/iniciar|\/start$/, ctx => generic.start(ctx))
 bot.hears(/^\/ayuda$/, ctx => generic.help(ctx))
