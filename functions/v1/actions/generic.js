@@ -5,15 +5,15 @@ module.exports = {
     help
 }
 
-async function start(ctx) {
+async function start(msg) {
 
-    let startMessage = `Bienvenido ${ctx.chat.first_name}.\nAquí puedes consultar mas de *12.000* poemas de mas de *1.300* autores.`
-    ctx.reply(startMessage)
+    const startMessage = `Bienvenido ${msg.chat.first_name}.\nAquí puedes consultar mas de *12.000* poemas de mas de *1.300* autores.`
+    ctx.reply(startMessage,{reply_markup: 'markdown'})
 }
 
-async function help(ctx) {
+async function help(msg) {
 
-    let welcomeMessage = `Comandos:\n
+    const welcomeMessage = `Comandos:\n
 Muestra información sobre un autor. 
 /autor Mario Benedetti\n
 Muestra los poemas de un autor.
@@ -25,5 +25,5 @@ Muestra información de un autor aleatorio.
 Muestra un poema aleatorio. 
 /descubrir_poema
     `
-    ctx.reply(welcomeMessage)
+    msg.reply(welcomeMessage)
 }

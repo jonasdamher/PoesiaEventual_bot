@@ -1,0 +1,124 @@
+'use strict';
+
+const { Markup } = require('telegraf')
+const bot = require('../config/bot')
+const axios = require('../config/axios')
+const helper = require('../helpers/functions')
+const { get } = require('../actions/author')
+
+module.exports = {
+    search_author_wiki,
+    send_author_by_id,
+    author_search
+}
+
+async function send_author_by_id(msg, id) {
+
+    return axios.get('author/get/' + id).then(res => {
+        return search_author_wiki(msg, res.data.name)
+    }).catch(err => {
+        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+    })
+}
+
+function create_authors_list(authorName, data) {
+
+    let list = data.authors.map(author => [Markup.button.callback(author.name, author._id)])
+    let filterAuthorName = helper.filter_text_of_pagination(authorName)
+
+    let currentPage = data.pagination.page
+
+    if (currentPage < data.pagination.lastPage) {
+        ++currentPage
+
+        let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+        let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+
+        list.push([Markup.button.callback(messagePagination, url)])
+    }
+
+    let message = ''
+    if (!authorName.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
+    return { message, list }
+}
+
+async function author_search(msg, authorName) {
+
+    let search = helper.add_params(authorName)
+
+    return axios.get('author/search/' + search).then(res => {
+
+        let { authors, pagination } = res.data
+
+        if (authors.length == 1 &&
+            pagination.page == 1 &&
+            pagination.lastPage == 1
+        ) {
+
+            let authorNameOne = authors[0].name
+            return search_author_wiki(msg, authorNameOne)
+
+        } else if (authors.length > 0) {
+
+            let { message, list } = create_authors_list(authorName, res.data)
+
+            bot.removeListener('callback_query').on('callback_query', (ctx) => {
+                msg.match[1] = ctx.update.callback_query.data
+                return get(msg)
+            })
+
+            return msg.reply(message, Markup.inlineKeyboard(list))
+
+        } else if (!authors.length) {
+
+            return msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
+        }
+
+    }).catch(err => {
+        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+    })
+}
+
+async function search_author_wiki(msg, authorName, i = 0) {
+
+    let message = 'No se ha encontrado información sobre *' + authorName + '*, disculpe las molestias.'
+
+    let urls = [
+        process.env.URL_API_WIKI,
+        process.env.URL_API_ECURED,
+        process.env.URL_API_CADIZ
+    ]
+
+    const url = urls[i] + encodeURI(authorName)
+
+    return axios.get(url).then(res => {
+
+        let page = res.data.query.pages
+        let key = Object.keys(page)[0]
+        let author = page[key]
+        let information = ''
+
+        if (author.hasOwnProperty('extract')) {
+            let domain = '_Fuente: ' + helper.get_domain_name(urls[i]) + '_'
+            information = '*' + author.title + '*\n' + author.extract + '\n' + domain
+        }
+
+        if (!information.length && urls.length > i) {
+            ++i
+            return search_author_wiki(msg, authorName, i)
+        } else {
+
+            if (information.length > 0) {
+                message = information
+            }
+            return msg.reply(message)
+        }
+
+    }).catch(e => {
+        return msg.reply('Hubo un error al buscar información sobre *' + authorName + '*, disculpe las molestias.')
+    })
+}
