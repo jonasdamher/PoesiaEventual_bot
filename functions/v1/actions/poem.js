@@ -32,10 +32,10 @@ async function get(msg) {
 
     if (helper.is_id(data)) {
 
-        return helperPoem.send_poem_by_id(msg, data)
+        return send_poem_by_id(msg, data)
     } else {
 
-        return helperPoem.poem_search(msg, data)
+        return poem_search(msg, data)
     }
 }
 
