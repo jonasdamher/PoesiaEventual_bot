@@ -19,7 +19,7 @@ async function discover(msg) {
 
         let poem = res.data
         let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.name
-        return msg.reply(message, { reply_markup: 'markdown' })
+        return msg.reply(message)
 
     }).catch(err => {
         return msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
@@ -83,7 +83,7 @@ async function send_poem_by_id(msg, id) {
     return axios.get('poem/get/' + id).then(res => {
 
         let poem = res.data
-        return msg.reply('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_', { reply_markup: 'markdown' })
+        return msg.reply('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
     }).catch(err => {
 
         return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre el título.')
