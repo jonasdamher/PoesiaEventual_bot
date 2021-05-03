@@ -8,7 +8,7 @@ module.exports = {
 async function start(msg) {
 
     const startMessage = `Bienvenido ${msg.chat.first_name}.\nAquí puedes consultar mas de *12.000* poemas de mas de *1.300* autores.`
-    ctx.reply(startMessage,{reply_markup: 'markdown'})
+    ctx.reply(startMessage)
 }
 
 async function help(msg) {
