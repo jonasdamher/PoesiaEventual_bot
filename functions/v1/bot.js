@@ -6,8 +6,8 @@ const poem = require('./actions/poem')
 
 const bot = require('./config/bot')
 
-bot.hears(/^\/iniciar|\/start$/, ctx => generic.start(ctx))
-bot.hears(/^\/ayuda$/, ctx => generic.help(ctx))
+bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
+bot.hears(/^\/ayuda$/, msg => generic.help(msg))
 
 bot.hears(/^\/descubrir_autor$/, msg => author.discover(msg))
 bot.hears(/^\/autor([\s]{1,}.+[a-zA-Z-0-9])/, msg => author.get(msg))
