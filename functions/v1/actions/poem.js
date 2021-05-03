@@ -2,7 +2,7 @@
 
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
-const { send_poem_by_id, poem_search } = require('../helpers/poem')
+const helperPoem = require('../helpers/poem')
 
 module.exports = {
     discover,
@@ -31,10 +31,10 @@ async function get(msg) {
 
     if (helper.is_id(data)) {
 
-        return send_poem_by_id(msg, data)
+        return helperPoem.send_poem_by_id(msg, data)
     } else {
 
-        return poem_search(msg, data)
+        return helperPoem.poem_search(msg, data)
     }
 }
 

@@ -4,7 +4,7 @@ const { Markup } = require('telegraf')
 const bot = require('../config/bot')
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
-const { get } = require('../actions/poem')
+const actionPoem = require('../actions/poem')
 
 module.exports = {
     send_poem_by_id,
@@ -68,7 +68,7 @@ async function poem_search(msg, poemTitle) {
 
             bot.removeListener('callback_query').on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
-                return get(msg)
+                return actionPoem.get(msg)
             })
 
             return msg.reply(message, Markup.inlineKeyboard(list))

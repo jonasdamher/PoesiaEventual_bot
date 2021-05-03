@@ -4,7 +4,7 @@ const { Markup } = require('telegraf')
 const bot = require('../config/bot')
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
-const { get } = require('../actions/author')
+const actionAuthor = require('../actions/author')
 
 module.exports = {
     search_author_wiki,
@@ -68,7 +68,7 @@ async function author_search(msg, authorName) {
 
             bot.removeListener('callback_query').on('callback_query', (ctx) => {
                 msg.match[1] = ctx.update.callback_query.data
-                return get(msg)
+                return actionAuthor.get(msg)
             })
 
             return msg.reply(message, Markup.inlineKeyboard(list))
