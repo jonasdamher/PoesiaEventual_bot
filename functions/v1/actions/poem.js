@@ -132,7 +132,7 @@ function create_poems_list(poemTitle, data) {
     // add poems
     let { poems, pagination } = data
 
-    let list = poems.map(poem => [poem.title + '\n' + 'Autor: ' + poem.author.name, poem._id])
+    let list = poems.map(poem => [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, poem._id)])
 
     // add pagination
     let filterPoemTitle = helper.filter_text_of_pagination(poemTitle)
@@ -145,7 +145,7 @@ function create_poems_list(poemTitle, data) {
         let url = filterPoemTitle + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + pagination.page + '/' + pagination.lastPage
 
-        list.push([messagePagination, url])
+        list.push([Markup.button.callback(messagePagination, url)])
     }
 
     let message = ''
