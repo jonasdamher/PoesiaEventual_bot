@@ -110,7 +110,8 @@ async function poem_search(msg, poemTitle) {
 
             let { message, list } = create_poems_list(poemTitle, res.data)
 
-            bot.removeListener('callback_query').on('callback_query', ctx => {
+            bot.removeListener("callback_query");
+            bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)
             })
