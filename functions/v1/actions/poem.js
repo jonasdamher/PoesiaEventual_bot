@@ -54,28 +54,6 @@ async function get_all_poems_of_author(msg) {
     }
 }
 
-async function send_poems_of_author(msg, id) {
-
-    return axios.get('author/poems/' + id).then(res => {
-
-        let { message, list } = create_poems_list_of_author(id, res.data)
-
-        bot.on('callback_query', ctx => {
-            msg.match[1] = ctx.update.callback_query.data
-
-            if (msg.match[1].includes('?perpage=') && msg.match[1].includes('&page=')) {
-                return get_all_poems_of_author(msg)
-            } else {
-                return send_poem_by_id(msg, msg.match[1])
-            }
-        })
-
-        return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
-    }).catch(err => {
-        return msg.reply(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
-    })
-}
-
 async function send_poem_by_id(msg, id) {
 
     return axios.get('poem/get/' + id).then(res => {
@@ -122,6 +100,28 @@ async function poem_search(msg, poemTitle) {
 
     }).catch(err => {
         return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre el título *' + poemTitle + '*.')
+    })
+}
+
+async function send_poems_of_author(msg, id) {
+
+    return axios.get('author/poems/' + id).then(res => {
+
+        let { message, list } = create_poems_list_of_author(id, res.data)
+
+        bot.on('callback_query', ctx => {
+            msg.match[1] = ctx.update.callback_query.data
+
+            if (msg.match[1].includes('?perpage=') && msg.match[1].includes('&page=')) {
+                return get_all_poems_of_author(msg)
+            } else {
+                return send_poem_by_id(msg, msg.match[1])
+            }
+        })
+
+        return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
+    }).catch(err => {
+        return msg.reply(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
     })
 }
 
