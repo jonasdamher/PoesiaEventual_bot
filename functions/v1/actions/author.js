@@ -40,7 +40,7 @@ async function send_author_by_id(msg, id) {
     return axios.get('author/get/' + id).then(res => {
         return search_author_wiki(msg, res.data.name)
     }).catch(err => {
-        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre el autor.')
     })
 }
 
@@ -89,8 +89,7 @@ async function author_search(msg, authorName) {
 
             let { message, list } = create_authors_list(authorName, res.data)
            
-            // bot.removeListener('callback_query')
-            bot.on('callback_query', ctx => {
+             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)
             })
