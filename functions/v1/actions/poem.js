@@ -7,8 +7,8 @@ const helper = require('../helpers/functions')
 
 module.exports = {
     discover,
-    get
-    // get_all_poems_for_author
+    get,
+    get_all_poems_of_author
 }
 
 async function discover(msg) {
@@ -39,44 +39,42 @@ async function get(msg) {
     }
 }
 
-// async function get_all_poems_for_author(msg, match) {
+async function get_all_poems_of_author(msg) {
 
-//     let data = match[1].trim()
+    let data = msg.match[1].trim()
 
-//     const filterParams = helper.filter_text_of_pagination(data)
+    const filter_data = helper.filter_text_of_pagination(data)
 
-//     if (helper.is_id(filterParams)) {
+    if (helper.is_id(filter_data)) {
 
-//         send_poems_of_author(msg, data)
-//     } else {
+        return send_poems_of_author(msg, data)
+    } else {
 
-//         authorSearch(msg, data)
-//     }
-// }
+        return author_search(msg, data)
+    }
+}
 
+async function send_poems_of_author(msg, id) {
 
-// async function send_poems_of_author(msg, authorId) {
+    return axios.get('author/poems/' + id).then(res => {
 
-//     axios.get('author/poems/' + authorId).then(res => {
+        let { message, list } = create_poems_list_of_author(id, res.data)
 
-//         let { message, options } = createPoemsAuthorList(msg, authorId, res.data)
+        bot.on('callback_query', ctx => {
+            msg.match[1] = ctx.update.callback_query.data
 
-//         bot.removeListener('callback_query').on('callback_query', res => {
-//             let currentData = res.data
+            if (msg.match[1].includes('?perpage=') && msg.match[1].includes('&page=')) {
+                return get_all_poems_of_author(msg)
+            } else {
+                return send_poem_by_id(msg, msg.match[1])
+            }
+        })
 
-//             if (currentData.includes('?perpage=') && currentData.includes('&page=')) {
-//                 poems(msg, ['', currentData])
-//             } else {
-//                 poem(msg, ['', currentData])
-//             }
-//         })
-
-//         helper.sendMessage(msg.chat.id, message, options)
-//     }).catch(err => {
-
-//         helper.sendMessage(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
-//     })
-// }
+        return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
+    }).catch(err => {
+        return msg.reply(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
+    })
+}
 
 async function send_poem_by_id(msg, id) {
 
@@ -110,7 +108,6 @@ async function poem_search(msg, poemTitle) {
 
             let { message, list } = create_poems_list(poemTitle, res.data)
 
-            // bot.removeListener("callback_query");
             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)
@@ -159,116 +156,92 @@ function create_poems_list(poemTitle, data) {
     return { message, list }
 }
 
-// function createAuthorsList(userId, author, data) {
+function create_author_list(authorName, data) {
 
-//     // add authors
-//     let list = data.authors.map(author => [{ text: author.name, callback_data: author._id }])
+    let list = data.authors.map(author => [Markup.button.callback(author.name, author._id)])
+    let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
-//     // add pagination
-//     let filterAuthorName = helper.filter_text_of_pagination(author)
+    let currentPage = data.pagination.page
 
-//     let currentPage = data.pagination.page
+    if (currentPage < data.pagination.lastPage) {
+        ++currentPage
 
-//     if (currentPage < data.pagination.lastPage) {
-//         ++currentPage
+        let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+        let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
 
-//         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
-//         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+        list.push([Markup.button.callback(messagePagination, url)])
+    }
 
-//         list.push([{ text: messagePagination, callback_data: url }])
-//     }
+    // Add message and options
+    let message = ''
+    if (!authorName.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' coincidencias,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
 
-//     // Add message and options
-//     let message = ''
-//     if (!author.includes('?perpage=')) {
-//         message = 'He encontrado ' + data.pagination.total + ' coincidencias,\nquizás estas buscando:'
-//     } else {
-//         message = 'Página ' + data.pagination.page + ':'
-//     }
+    return { message, list }
+}
 
-//     let options = {
-//         parse_mode: 'Markdown',
-//         reply_to_message_id: userId,
-//         reply_markup: {
-//             remove_keyboard: true,
-//             inline_keyboard: list
-//         }
-//     }
+function create_poems_list_of_author(authorId, data) {
 
-//     return { message, options }
-// }
+    let list = data.poems.map(poem => [Markup.button.callback(poem.title, poem._id)])
+    let filterAuthorId = helper.filter_text_of_pagination(authorId)
 
-// function createPoemsAuthorList(msg, authorId, data) {
+    let currentPage = data.pagination.page
 
-//     let list = data.poems.map(poem => [{ text: poem.title, callback_data: poem._id }])
+    if (currentPage < data.pagination.lastPage) {
+        ++currentPage
 
-//     // add pagination
-//     let filterAuthorId = helper.filter_text_of_pagination(authorId)
+        let url = filterAuthorId + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+        let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
 
-//     let currentPage = data.pagination.page
+        list.push([Markup.button.callback(messagePagination, url)])
+    }
 
-//     if (currentPage < data.pagination.lastPage) {
-//         ++currentPage
+    let message = ''
+    if (!authorId.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' poemas,\nquizás estas buscando:'
+    } else {
+        message = 'Página ' + data.pagination.page + ':'
+    }
 
-//         let url = filterAuthorId + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
-//         let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
+    return { message, list }
+}
 
-//         list.push([{ text: messagePagination, callback_data: url }])
-//     }
+async function author_search(msg, author_name) {
 
-//     let message = ''
-//     if (!authorId.includes('?perpage=')) {
-//         message = 'He encontrado ' + data.pagination.total + ' poemas,\nquizás estas buscando:'
-//     } else {
-//         message = 'Página ' + data.pagination.page + ':'
-//     }
-//     // Add message and options
-//     let options = {
-//         parse_mode: 'Markdown',
-//         reply_to_message_id: msg,
-//         reply_markup: {
-//             remove_keyboard: true,
-//             inline_keyboard: list
-//         }
-//     }
+    let search = helper.add_params(author_name)
 
-//     return { message, options }
-// }
+    return axios.get('author/search/' + search).then(res => {
 
-// async function authorSearch(msg, authorName) {
+        let { authors, pagination } = res.data
 
-//     let search = helper.add_params(authorName)
+        if (authors.length == 1 &&
+            pagination.page == 1 &&
+            pagination.lastPage == 1
+        ) {
 
-//     axios.get('author/search/' + search).then(res => {
+            let first_author = authors[0]
+            return send_poems_of_author(msg, first_author._id)
 
-//         let data = res.data
+        } else if (authors.length > 0) {
 
-//         if (data.authors.length == 1 &&
-//             data.pagination.page == 1 &&
-//             data.pagination.lastPage == 1
-//         ) {
+            let { message, list } = create_author_list(author_name, res.data)
 
-//             let authorNameOne = data.authors[0]
-//             send_poems_of_author(msg, authorNameOne._id)
+            bot.on('callback_query', ctx => {
+                msg.match[1] = ctx.update.callback_query.data
+                return get_all_poems_of_author(msg)
+            })
 
-//         } else if (data.authors.length > 0) {
+            return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
-//             let { message, options } = createAuthorsList(msg, authorName, data)
+        } else if (!authors.length) {
 
-//             bot.removeListener('callback_query').on('callback_query', res => {
-//                 let currentData = res.data
-//                 poems(msg, ['', currentData])
+            return msg.replyWithMarkdown('Disculpa, no se ha podido encontrar una referencia sobre *' + author_name + '*.')
+        }
 
-//             })
-
-//             helper.sendMessage(msg.chat.id, message, options)
-
-//         } else if (!data.authors.length) {
-
-//             helper.sendMessage(msg.chat.id, 'Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
-//         }
-
-//     }).catch(err => {
-//         helper.sendMessage(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
-//     })
-// }
+    }).catch(err => {
+        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + author_name + '*.')
+    })
+}
