@@ -88,8 +88,9 @@ async function author_search(msg, authorName) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_authors_list(authorName, res.data)
-            bot.removeListener('callback_query')
-            bot.on('callback_query', (ctx) => {
+           
+            // bot.removeListener('callback_query')
+            bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)
             })
