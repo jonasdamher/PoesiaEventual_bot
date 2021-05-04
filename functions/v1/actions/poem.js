@@ -104,7 +104,7 @@ async function poem_search(msg, poemTitle) {
         ) {
 
             let poem = poems[0]
-            return msg.reply('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
+            return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
 
         } else if (poems.length > 0) {
 
@@ -116,7 +116,7 @@ async function poem_search(msg, poemTitle) {
                 return get(msg)
             })
 
-            return msg.reply(message, Markup.inlineKeyboard(list))
+            return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!poems.length) {
 

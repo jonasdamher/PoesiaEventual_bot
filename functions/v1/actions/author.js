@@ -95,7 +95,7 @@ async function author_search(msg, authorName) {
                 return get(msg)
             })
 
-            return msg.reply(message, Markup.inlineKeyboard(list))
+            return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
 
