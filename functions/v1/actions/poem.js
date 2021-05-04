@@ -19,7 +19,7 @@ async function discover(msg) {
 
         let poem = res.data
         let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.name
-        return msg.reply(message)
+        return msg.replyWithMarkdown(message)
 
     }).catch(err => {
         return msg.reply('Hubo un error al mostrar la información, disculpa las molestias.')
