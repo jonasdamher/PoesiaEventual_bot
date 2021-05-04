@@ -83,7 +83,7 @@ async function send_poem_by_id(msg, id) {
     return axios.get('poem/get/' + id).then(res => {
 
         let poem = res.data
-        return msg.reply('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
+        return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
     }).catch(err => {
 
         return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre el título.')
@@ -120,11 +120,11 @@ async function poem_search(msg, poemTitle) {
 
         } else if (!poems.length) {
 
-            return msg.reply('Disculpa, no se ha podido encontrar una referencia sobre el título *' + poemTitle + '*.')
+            return msg.replyWithMarkdown('Disculpa, no se ha podido encontrar una referencia sobre el título *' + poemTitle + '*.')
         }
 
     }).catch(err => {
-        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre el título *' + poemTitle + '*.')
+        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre el título *' + poemTitle + '*.')
     })
 }
 

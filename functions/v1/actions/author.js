@@ -40,7 +40,7 @@ async function send_author_by_id(msg, id) {
     return axios.get('author/get/' + id).then(res => {
         return search_author_wiki(msg, res.data.name)
     }).catch(err => {
-        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
     })
 }
 
@@ -99,11 +99,11 @@ async function author_search(msg, authorName) {
 
         } else if (!authors.length) {
 
-            return msg.reply('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
+            return msg.replyWithMarkdown('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
         }
 
     }).catch(err => {
-        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
     })
 }
 
@@ -139,10 +139,10 @@ async function search_author_wiki(msg, authorName, i = 0) {
             if (information.length > 0) {
                 message = information
             }
-            return msg.reply(message)
+            return msg.replyWithMarkdown(message)
         }
 
     }).catch(e => {
-        return msg.reply('Hubo un error al buscar información sobre *' + authorName + '*, disculpe las molestias.')
+        return msg.replyWithMarkdown('Hubo un error al buscar información sobre *' + authorName + '*, disculpe las molestias.')
     })
 }
