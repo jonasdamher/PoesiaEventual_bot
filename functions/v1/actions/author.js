@@ -48,7 +48,7 @@ async function send_author_by_id(msg, id) {
 
 function create_authors_list(authorName, data) {
 
-    let list = data.authors.map(author => [Markup.button.callback(author.name, author._id)])
+    let list = data.authors.map(author => [Markup.button.callback(author.name, [author._id,'get'])])
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
     let currentPage = data.pagination.page
@@ -91,10 +91,10 @@ async function author_search(msg, authorName) {
 
             let { message, list } = create_authors_list(authorName, res.data)
  
-            EE.removeListener('callback_query')
             bot.on('callback_query', ctx => {
-                msg.match[1] = ctx.update.callback_query.data
-                return get(msg)
+                // msg.match[1] = ctx.update.callback_query.data
+                console.log(ctx.update.callback_query.data)
+                // return get(msg)
             })
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
