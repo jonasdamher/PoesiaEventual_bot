@@ -88,10 +88,11 @@ async function poem_search(msg, poemTitle) {
 
             let { message, list } = create_poems_list(poemTitle, res.data)
          
-            EE.removeListener('callback_query')
-            bot.on('callback_query', ctx => {
+             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
-                return get(msg)
+                  get(msg)
+                return ctx.answerCbQuery()
+
             })
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
@@ -112,15 +113,15 @@ async function send_poems_of_author(msg, id) {
 
         let { message, list } = create_poems_list_of_author(id, res.data)
         
-        EE.removeListener('callback_query')
-        bot.on('callback_query', ctx => {
+         bot.on('callback_query', ctx => {
             msg.match[1] = ctx.update.callback_query.data
 
             if (msg.match[1].includes('?perpage=') && msg.match[1].includes('&page=')) {
-                return get_all_poems_of_author(msg)
+                  get_all_poems_of_author(msg)
             } else {
-                return send_poem_by_id(msg, msg.match[1])
+                  send_poem_by_id(msg, msg.match[1])
             }
+            return ctx.answerCbQuery()
         })
 
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
@@ -233,10 +234,11 @@ async function author_search(msg, author_name) {
 
             let { message, list } = create_author_list(author_name, res.data)
  
-            EE.removeListener('callback_query')
-            bot.on('callback_query', ctx => {
+             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
-                return get_all_poems_of_author(msg)
+                 get_all_poems_of_author(msg)
+                return ctx.answerCbQuery()
+ 
             })
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
