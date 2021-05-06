@@ -4,6 +4,8 @@ const { Markup } = require('telegraf')
 const bot = require('../config/bot')
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
+const EventEmitter = require('eventemitter3')
+const EE = new EventEmitter()
 
 module.exports = {
     discover,
@@ -88,9 +90,10 @@ async function author_search(msg, authorName) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_authors_list(authorName, res.data)
-           bot.removeEventListener("callback_query");
+ 
+            EE.removeListener('callback_query', author_search)
 
-             bot.on('callback_query', ctx => {
+            bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)
             })
