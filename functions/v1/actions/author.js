@@ -93,8 +93,7 @@ async function author_search(msg, authorName) {
  
             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
-                  ctx.answerCbQuery()
- 
+  console.log(ctx)
                 return get(msg)
 
             })
