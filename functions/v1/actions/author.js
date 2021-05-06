@@ -91,8 +91,7 @@ async function author_search(msg, authorName) {
 
             let { message, list } = create_authors_list(authorName, res.data)
  
-            EE.removeListener('callback_query', author_search)
-
+            EE.removeListener('callback_query')
             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)

@@ -87,7 +87,8 @@ async function poem_search(msg, poemTitle) {
         } else if (poems.length > 0) {
 
             let { message, list } = create_poems_list(poemTitle, res.data)
- 
+         
+            EE.removeListener('callback_query')
             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get(msg)
@@ -110,7 +111,8 @@ async function send_poems_of_author(msg, id) {
     return axios.get('author/poems/' + id).then(res => {
 
         let { message, list } = create_poems_list_of_author(id, res.data)
- 
+        
+        EE.removeListener('callback_query')
         bot.on('callback_query', ctx => {
             msg.match[1] = ctx.update.callback_query.data
 
@@ -231,6 +233,7 @@ async function author_search(msg, author_name) {
 
             let { message, list } = create_author_list(author_name, res.data)
  
+            EE.removeListener('callback_query')
             bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
                 return get_all_poems_of_author(msg)
