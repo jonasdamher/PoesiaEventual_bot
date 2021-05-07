@@ -7,7 +7,8 @@ const poem = require('./actions/poem')
 const bot = require('./config/bot')
 
 bot.on('callback_query', ctx => {
-    return eval(ctx.update.callback_query.data)
+    let msg = ctx.update.callback_query.data
+    return eval(msg)
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
