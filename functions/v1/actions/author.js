@@ -89,7 +89,7 @@ async function author_search(msg, authorName) {
 
         } else if (authors.length > 0) {
 
-            let { message, list } = create_authors_list(authorName, res.data,msg.id)
+            let { message, list } = create_authors_list(authorName, res.data,msg.message.chat.id)
             
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
