@@ -46,11 +46,14 @@ async function send_author_by_id(msg, id) {
     })
 }
 
-function create_authors_list(authorName, data,id) {
+function create_authors_list(authorName, data, msg) {
 
-    let list = data.authors.map(author => [Markup.button.callback(author.name,"author.get({match:['', "+author._id+"],id:"+id+"})")])
+    let list = data.authors.map(author => {
+        msg.match[1] = author._id
+        return [Markup.button.callback(author.name, "author.get(" + msg + ")")]
+    })
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
-    
+
     let currentPage = data.pagination.page
 
     if (currentPage < data.pagination.lastPage) {
@@ -58,8 +61,9 @@ function create_authors_list(authorName, data,id) {
 
         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+        msg.match[1] = url
 
-        list.push([Markup.button.callback(messagePagination, "author.get({match:['', "+url+"],id:"+id+"})")])
+        list.push([Markup.button.callback(messagePagination, "author.get(" + msg + ")")])
     }
 
     let message = ''
@@ -88,9 +92,9 @@ async function author_search(msg, authorName) {
             return search_author_wiki(msg, authorNameOne)
 
         } else if (authors.length > 0) {
+            let currentMsg = msg
+            let { message, list } = create_authors_list(authorName, res.data, currentMsg)
 
-            let { message, list } = create_authors_list(authorName, res.data,msg.message.chat.id)
-            
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
