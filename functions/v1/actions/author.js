@@ -48,9 +48,7 @@ async function send_author_by_id(msg, id) {
 
 function create_authors_list(authorName, data) {
 
-    let list = data.authors.map(author => {
-         return [Markup.button.callback(author.name, '{id:author._id,method:"author.get(ctx)"}')]
-    })
+    let list = data.authors.map(author => [Markup.button.callback(author.name, '{id:author._id,method:"author.get(ctx)"}')])
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
     let currentPage = data.pagination.page
@@ -91,7 +89,7 @@ async function author_search(msg, authorName) {
             return search_author_wiki(msg, authorNameOne)
 
         } else if (authors.length > 0) {
-             let { message, list } = create_authors_list(authorName, res.data)
+            let { message, list } = create_authors_list(authorName, res.data)
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 

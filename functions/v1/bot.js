@@ -8,7 +8,7 @@ const bot = require('./config/bot')
 
 bot.on('callback_query', ctx => {
     let msg = JSON.parse(ctx.update.callback_query.data)
-    ctx.match['', msg.id]
+    ctx.match=['', msg.id]
     return eval(msg.method)
 })
 
