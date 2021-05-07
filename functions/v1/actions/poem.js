@@ -90,8 +90,7 @@ async function poem_search(msg, poemTitle) {
          
              bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
-                ctx.answerCbQuery()
-                return get(msg)
+                 return get(msg)
 
             })
 
@@ -115,8 +114,7 @@ async function send_poems_of_author(msg, id) {
         
          bot.on('callback_query', ctx => {
             msg.match[1] = ctx.update.callback_query.data
-            ctx.answerCbQuery()
-
+ 
             if (msg.match[1].includes('?perpage=') && msg.match[1].includes('&page=')) {
                 return  get_all_poems_of_author(msg)
             } else {
@@ -236,8 +234,7 @@ async function author_search(msg, author_name) {
  
              bot.on('callback_query', ctx => {
                 msg.match[1] = ctx.update.callback_query.data
-                ctx.answerCbQuery()
-
+ 
                 return  get_all_poems_of_author(msg)
  
             })

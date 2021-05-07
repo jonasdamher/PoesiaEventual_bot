@@ -16,6 +16,10 @@ bot.hears(/^\/descubrir_poema$/, msg => poem.discover(msg))
 // bot.hears(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get_all_poems_of_author(msg))
 bot.hears(/^\/poema([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get(msg))
 
+bot.on('callback_query', ctx => {
+    return eval(ctx.update.callback_query.data)
+})
+
 exports.handler = async event => {
     try {
         await bot.handleUpdate(JSON.parse(event.body));
