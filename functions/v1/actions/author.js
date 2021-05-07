@@ -46,11 +46,10 @@ async function send_author_by_id(msg, id) {
     })
 }
 
-function create_authors_list(authorName, data, msg) {
+function create_authors_list(authorName, data) {
 
     let list = data.authors.map(author => {
-        msg.match[1] = author._id
-        return [Markup.button.callback(author.name, "author.get(" + msg + ")")]
+         return [Markup.button.callback(author.name, "author.get(ctx)")]
     })
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
@@ -63,7 +62,7 @@ function create_authors_list(authorName, data, msg) {
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
         msg.match[1] = url
 
-        list.push([Markup.button.callback(messagePagination, "author.get(" + msg + ")")])
+        list.push([Markup.button.callback(messagePagination, "author.get(ctx)")])
     }
 
     let message = ''
@@ -93,7 +92,7 @@ async function author_search(msg, authorName) {
 
         } else if (authors.length > 0) {
             let currentMsg = msg
-            let { message, list } = create_authors_list(authorName, res.data, currentMsg)
+            let { message, list } = create_authors_list(authorName, res.data)
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
