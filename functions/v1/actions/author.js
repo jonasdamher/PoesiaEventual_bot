@@ -90,11 +90,9 @@ async function author_search(msg, authorName) {
 
         } else if (authors.length > 0) {
             let { message, list } = create_authors_list(authorName, res.data)
-            bot.stop('callback_query')
-            bot.on('callback_query', ctx => {
-                let data = ctx.update.callback_query.data
-                msg.match[1] = data
-                return get(msg)
+             bot.on('callback_query', ctx => {
+                 ctx['match'] =['',ctx.update.callback_query.data]
+                return ctx.replyWithMarkdown() // get(msg)
             })
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
