@@ -6,6 +6,10 @@ const poem = require('./actions/poem')
 
 const bot = require('./config/bot')
 
+bot.on('callback_query', ctx => {
+    return eval(ctx.update.callback_query.data)
+})
+
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
 bot.hears(/^\/ayuda$/, msg => generic.help(msg))
 
@@ -13,12 +17,8 @@ bot.hears(/^\/descubrir_autor$/, msg => author.discover(msg))
 bot.hears(/^\/autor([\s]{1,}.+[a-zA-Z-0-9])/, msg => author.get(msg))
 
 bot.hears(/^\/descubrir_poema$/, msg => poem.discover(msg))
-// bot.hears(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get_all_poems_of_author(msg))
 bot.hears(/^\/poema([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get(msg))
-
-bot.on('callback_query', ctx => {
-    return eval(ctx.update.callback_query.data)
-})
+// bot.hears(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get_all_poems_of_author(msg))
 
 exports.handler = async event => {
     try {
