@@ -49,7 +49,7 @@ async function send_author_by_id(msg, id) {
 function create_authors_list(authorName, data) {
 
     let list = data.authors.map(author => {
-         return [Markup.button.callback(author.name, "author.get(ctx)")]
+         return [Markup.button.callback(author.name, {id:author._id,method:"author.get(ctx)"})]
     })
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
@@ -62,7 +62,7 @@ function create_authors_list(authorName, data) {
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
         msg.match[1] = url
 
-        list.push([Markup.button.callback(messagePagination, "author.get(ctx)")])
+        list.push([Markup.button.callback(messagePagination, {id:url,method:"author.get(ctx)"})])
     }
 
     let message = ''

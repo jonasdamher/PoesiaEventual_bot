@@ -8,7 +8,8 @@ const bot = require('./config/bot')
 
 bot.on('callback_query', ctx => {
     let msg = ctx.update.callback_query.data
-    return eval(msg)
+    ctx.match['', msg.id]
+    return eval(msg.method)
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
