@@ -3,14 +3,7 @@
 const generic = require('./actions/generic')
 const author = require('./actions/author')
 const poem = require('./actions/poem')
-
 const bot = require('./config/bot')
-
-bot.on('callback_query', ctx => {
-    let msg = JSON.parse(ctx.update.callback_query.data)
-    ctx.match=['', msg.id]
-    return eval(msg.method)
-})
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
 bot.hears(/^\/ayuda$/, msg => generic.help(msg))
