@@ -91,8 +91,7 @@ async function author_search(msg, authorName) {
             return search_author_wiki(msg, authorNameOne)
 
         } else if (authors.length > 0) {
-            let currentMsg = msg
-            let { message, list } = create_authors_list(authorName, res.data)
+             let { message, list } = create_authors_list(authorName, res.data)
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
