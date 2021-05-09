@@ -170,7 +170,7 @@ function create_author_list(author_name, data) {
     }
 
     let message = ''
-    if (!poemTitle.includes('?perpage=')) {
+    if (!author_name.includes('?perpage=')) {
         message = 'He encontrado ' + pagination.total + ' coincidencias,\nquizás estas buscando:'
     } else {
         message = 'Página ' + pagination.page + ':'
