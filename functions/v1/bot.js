@@ -6,7 +6,13 @@ const author = require('./actions/author')
 const bot = require('./config/bot')
 
 bot.on('callback_query', msg => {
-    return msg.reply(msg.update.callback_query.data)
+    let json = JSON.parse(msg.update.callback_query.data)
+    msg.match = ['', json.data]
+    if (author[json.method]) {
+        return author[json.method](msg)
+    } else {
+        msg.reply('Hubo un error al coger la información, disculpe las molestias.')
+    }
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
