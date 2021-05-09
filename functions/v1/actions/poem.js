@@ -84,12 +84,7 @@ async function poem_search(msg, poemTitle) {
         } else if (poems.length > 0) {
 
             let { message, list } = create_poems_list(poemTitle, res.data)
-            console.log(msg)
-
-            console.log(message)
-            console.log(list)
-
-            return msg.reply(message, Markup.inlineKeyboard(list))
+            return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!poems.length) {
 
@@ -231,7 +226,10 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-            return msg.reply(message, Markup.inlineKeyboard(list))
+            console.log(msg)
+            console.log(message)
+            console.log(list)
+            return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
 
