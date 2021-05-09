@@ -5,9 +5,8 @@ const author = require('./actions/author')
 // const poem = require('./actions/poem')
 const bot = require('./config/bot')
 
-bot.on('callback_query', ctx => {
-    console.log('okoloco')
-     return ctx.answerCbQuery()
+bot.on('callback_query', msg => {
+      return msg.reply('okoloco')
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
