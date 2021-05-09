@@ -8,8 +8,7 @@ const helper = require('../helpers/functions')
 module.exports = {
     discover,
     get_poem,
-    get_all_poems_of_author,
-    send_poem_by_id
+    get_all_poems_of_author
 }
 
 async function discover(msg) {
@@ -182,7 +181,7 @@ function create_poems_list_of_author(authorId, data) {
 
     let list = data.poems.map(poem => {
 
-        let json = JSON.stringify({ method: 'send_poem_by_id', data: poem._id })
+        let json = JSON.stringify({ method: 'get_poem', data: poem._id })
 
         return [Markup.button.callback(poem.title, json)]
     })
