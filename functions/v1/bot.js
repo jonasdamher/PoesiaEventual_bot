@@ -6,7 +6,7 @@ const author = require('./actions/author')
 const bot = require('./config/bot')
 
 bot.on('callback_query', msg => {
-      return msg.reply('okoloco')
+    return msg.reply(msg.update.callback_query.data)
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
