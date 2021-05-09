@@ -7,8 +7,7 @@ const bot = require('./config/bot')
 
 bot.on('callback_query', ctx => {
     console.log('okoloco')
-    // return ctx.reply('claro que sí')
-    //ctx.answerCbQuery()
+     return ctx.answerCbQuery()
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))

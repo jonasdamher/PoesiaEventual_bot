@@ -48,7 +48,7 @@ async function send_author_by_id(msg, id) {
 
 function create_authors_list(authorName, data) {
 
-    let list = data.authors.map(author => [Markup.button.callback(author.name,  author._id)])
+    let list = data.authors.map(author => [Markup.button.callback(author.name,  '/autor '+author._id)])
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
     let currentPage = data.pagination.page
@@ -58,9 +58,8 @@ function create_authors_list(authorName, data) {
 
         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
-        msg.match[1] = url
-
-        list.push([Markup.button.callback(messagePagination, url)])
+ 
+        list.push([Markup.button.callback(messagePagination, '/autor '+url)])
     }
 
     let message = ''
