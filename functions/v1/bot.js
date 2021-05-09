@@ -6,7 +6,7 @@ const poem = require('./actions/poem')
 const bot = require('./config/bot')
 
 bot.on('callback_query', ctx => {
-    return ctx.reply('claro que sí')
+    // return ctx.reply('claro que sí')
     //ctx.answerCbQuery()
 })
 
