@@ -87,13 +87,7 @@ async function poem_search(msg, poemTitle) {
         } else if (poems.length > 0) {
 
             let { message, list } = create_poems_list(poemTitle, res.data)
-            bot.stop('callback_query')
 
-             bot.on('callback_query', ctx => {
-                msg.match[1] = ctx.update.callback_query.data
-                 return get(msg)
-
-            })
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
@@ -112,17 +106,8 @@ async function send_poems_of_author(msg, id) {
     return axios.get('author/poems/' + id).then(res => {
 
         let { message, list } = create_poems_list_of_author(id, res.data)
-        bot.stop('callback_query')
 
-         bot.on('callback_query', ctx => {
-            msg.match[1] = ctx.update.callback_query.data
- 
-            if (msg.match[1].includes('?perpage=') && msg.match[1].includes('&page=')) {
-                return  get_all_poems_of_author(msg)
-            } else {
-                return send_poem_by_id(msg, msg.match[1])
-            }
-        })
+      
 
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
     }).catch(err => {
@@ -135,7 +120,10 @@ function create_poems_list(poemTitle, data) {
     // add poems
     let { poems, pagination } = data
 
-    let list = poems.map(poem => [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, poem._id)])
+    let list = poems.map(poem => {
+        let json = JSON.stringify({ method: 'get', data: poem._id })
+        return [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, json)]
+    })
 
     // add pagination
     let filterPoemTitle = helper.filter_text_of_pagination(poemTitle)
@@ -147,8 +135,9 @@ function create_poems_list(poemTitle, data) {
 
         let url = filterPoemTitle + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + pagination.page + '/' + pagination.lastPage
+        let json = JSON.stringify({ method: 'get', data: url })
 
-        list.push([Markup.button.callback(messagePagination, url)])
+        list.push([Markup.button.callback(messagePagination, json)])
     }
 
     let message = ''
@@ -163,7 +152,11 @@ function create_poems_list(poemTitle, data) {
 
 function create_author_list(authorName, data) {
 
-    let list = data.authors.map(author => [Markup.button.callback(author.name, author._id)])
+    let list = data.authors.map(author => {
+        let json = JSON.stringify({ method: 'get_all_poems_of_author', data: author._id })
+
+        return [Markup.button.callback(author.name, json)]
+    })
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
     let currentPage = data.pagination.page
@@ -173,8 +166,9 @@ function create_author_list(authorName, data) {
 
         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+        let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url })
 
-        list.push([Markup.button.callback(messagePagination, url)])
+        list.push([Markup.button.callback(messagePagination, json)])
     }
 
     // Add message and options
@@ -190,7 +184,13 @@ function create_author_list(authorName, data) {
 
 function create_poems_list_of_author(authorId, data) {
 
-    let list = data.poems.map(poem => [Markup.button.callback(poem.title, poem._id)])
+    let list = data.poems.map(poem => {
+
+        let json = JSON.stringify({ method: 'send_poem_by_id', data: poem._id })
+        
+        return [Markup.button.callback(poem.title, json)]
+    })
+    
     let filterAuthorId = helper.filter_text_of_pagination(authorId)
 
     let currentPage = data.pagination.page
@@ -200,8 +200,9 @@ function create_poems_list_of_author(authorId, data) {
 
         let url = filterAuthorId + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
+        let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url})
 
-        list.push([Markup.button.callback(messagePagination, url)])
+        list.push([Markup.button.callback(messagePagination, json)])
     }
 
     let message = ''
@@ -233,14 +234,7 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-            bot.stop('callback_query')
 
-             bot.on('callback_query', ctx => {
-                msg.match[1] = ctx.update.callback_query.data
- 
-                return  get_all_poems_of_author(msg)
- 
-            })
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
