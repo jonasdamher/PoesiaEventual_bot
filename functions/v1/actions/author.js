@@ -79,8 +79,7 @@ async function author_search(msg, authorName) {
     return axios.get('author/search/' + search).then(res => {
 
         let { authors, pagination } = res.data
-        console.log('ok search authors')
-        if (authors.length == 1 &&
+         if (authors.length == 1 &&
             pagination.page == 1 &&
             pagination.lastPage == 1
         ) {
