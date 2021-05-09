@@ -6,7 +6,8 @@ const poem = require('./actions/poem')
 const bot = require('./config/bot')
 
 bot.on('callback_query', ctx => {
-    return ctx.answerCbQuery()
+    return ctx.reply('claro que sí')
+    //ctx.answerCbQuery()
 })
 
 bot.hears(/^\/iniciar|\/start$/, msg => generic.start(msg))
