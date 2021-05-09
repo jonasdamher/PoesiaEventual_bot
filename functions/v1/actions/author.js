@@ -1,22 +1,19 @@
 'use strict';
 
 const { Markup } = require('telegraf')
-const bot = require('../config/bot')
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
-const EventEmitter = require('eventemitter3')
-const EE = new EventEmitter()
 
 module.exports = {
     discover,
-    get
+    get_author
 }
 
 async function discover(msg) {
 
     msg.reply('Espera un momento...\nBuscando un autor interesante para ti.')
 
-    return axios.get_author('author/random').then(author => {
+    return axios.get('author/random').then(author => {
 
         let authorName = author.data.name
         return search_author_wiki(msg, authorName)
@@ -39,7 +36,7 @@ async function get_author(msg) {
 
 async function send_author_by_id(msg, id) {
 
-    return axios.get_author('author/get/' + id).then(res => {
+    return axios.get('author/get/' + id).then(res => {
         return search_author_wiki(msg, res.data.name)
     }).catch(err => {
         return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre el autor.')
@@ -49,7 +46,7 @@ async function send_author_by_id(msg, id) {
 function create_authors_list(authorName, data) {
 
     let list = data.authors.map(author => {
-        let json = JSON.stringify({ method: "get", data: author._id})
+        let json = JSON.stringify({ method: "get_author", data: author._id })
         return [Markup.button.callback(author.name, json)]
     })
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
@@ -61,7 +58,7 @@ function create_authors_list(authorName, data) {
 
         let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
-        let json = JSON.stringify({ method: "get", data:url})
+        let json = JSON.stringify({ method: "get_author", data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
     }
@@ -79,7 +76,7 @@ async function author_search(msg, authorName) {
 
     let search = helper.add_params(authorName)
 
-    return axios.get_author('author/search/' + search).then(res => {
+    return axios.get('author/search/' + search).then(res => {
 
         let { authors, pagination } = res.data
         console.log('ok search authors')
@@ -93,7 +90,6 @@ async function author_search(msg, authorName) {
 
         } else if (authors.length > 0) {
             let { message, list } = create_authors_list(authorName, res.data)
-            console.log('create list')
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
@@ -118,7 +114,7 @@ async function search_author_wiki(msg, authorName, i = 0) {
 
     const url = urls[i] + encodeURI(authorName)
 
-    return axios.get_author(url).then(res => {
+    return axios.get(url).then(res => {
 
         let page = res.data.query.pages
         let key = Object.keys(page)[0]

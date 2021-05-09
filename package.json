@@ -23,7 +23,6 @@
   "homepage": "https://github.com/jonasdamher/PoesiaEventual_bot#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "eventemitter3": "^4.0.7",
     "netlify-lambda": "^2.0.5",
     "telegraf": "^4.3.0"
   },

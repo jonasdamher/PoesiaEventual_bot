@@ -1,15 +1,13 @@
 'use strict';
 
 const { Markup } = require('telegraf')
-const bot = require('../config/bot')
 const axios = require('../config/axios')
 const helper = require('../helpers/functions')
-const EventEmitter = require('eventemitter3')
-const EE = new EventEmitter()
+
 
 module.exports = {
     discover,
-    get,
+    get_poem,
     get_all_poems_of_author
 }
 
@@ -17,7 +15,7 @@ async function discover(msg) {
 
     msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
 
-    return axios.get_poem('poem/random').then(res => {
+    return axios.get('poem/random').then(res => {
 
         let poem = res.data
         let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.name
@@ -58,7 +56,7 @@ async function get_all_poems_of_author(msg) {
 
 async function send_poem_by_id(msg, id) {
 
-    return axios.get_poem('poem/get/' + id).then(res => {
+    return axios.get('poem/get/' + id).then(res => {
 
         let poem = res.data
         return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
@@ -72,7 +70,7 @@ async function poem_search(msg, poemTitle) {
 
     let search = helper.add_params(poemTitle)
 
-    return axios.get_poem('poem/search/' + search).then(res => {
+    return axios.get('poem/search/' + search).then(res => {
 
         let { poems, pagination } = res.data
 
@@ -103,11 +101,11 @@ async function poem_search(msg, poemTitle) {
 
 async function send_poems_of_author(msg, id) {
 
-    return axios.get_poem('author/poems/' + id).then(res => {
+    return axios.get('author/poems/' + id).then(res => {
 
         let { message, list } = create_poems_list_of_author(id, res.data)
 
-      
+
 
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
     }).catch(err => {
@@ -121,7 +119,7 @@ function create_poems_list(poemTitle, data) {
     let { poems, pagination } = data
 
     let list = poems.map(poem => {
-        let json = JSON.stringify({ method: 'get', data: poem._id })
+        let json = JSON.stringify({ method: 'get_poem', data: poem._id })
         return [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, json)]
     })
 
@@ -135,7 +133,7 @@ function create_poems_list(poemTitle, data) {
 
         let url = filterPoemTitle + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + pagination.page + '/' + pagination.lastPage
-        let json = JSON.stringify({ method: 'get', data: url })
+        let json = JSON.stringify({ method: 'get_poem', data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
     }
@@ -187,10 +185,10 @@ function create_poems_list_of_author(authorId, data) {
     let list = data.poems.map(poem => {
 
         let json = JSON.stringify({ method: 'send_poem_by_id', data: poem._id })
-        
+
         return [Markup.button.callback(poem.title, json)]
     })
-    
+
     let filterAuthorId = helper.filter_text_of_pagination(authorId)
 
     let currentPage = data.pagination.page
@@ -200,7 +198,7 @@ function create_poems_list_of_author(authorId, data) {
 
         let url = filterAuthorId + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
-        let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url})
+        let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
     }
@@ -219,7 +217,7 @@ async function author_search(msg, author_name) {
 
     let search = helper.add_params(author_name)
 
-    return axios.get_poem('author/search/' + search).then(res => {
+    return axios.get('author/search/' + search).then(res => {
 
         let { authors, pagination } = res.data
 
