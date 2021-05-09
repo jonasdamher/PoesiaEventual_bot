@@ -156,6 +156,8 @@ function create_author_list(authorName, data) {
         return [Markup.button.callback(author.name, json)]
     })
 
+    console.log('creando lista de autores')
+
     let filterAuthorName = helper.filter_text_of_pagination(authorName)
     let currentPage = data.pagination.page
 
@@ -167,6 +169,7 @@ function create_author_list(authorName, data) {
         let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
+        console.log('creando lista paginación')
     }
 
     // Add message and options
@@ -232,7 +235,7 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-
+            console.log('listilla')
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
