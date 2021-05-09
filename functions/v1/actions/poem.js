@@ -155,8 +155,8 @@ function create_author_list(authorName, data) {
 
         return [Markup.button.callback(author.name, json)]
     })
-    let filterAuthorName = helper.filter_text_of_pagination(authorName)
 
+    let filterAuthorName = helper.filter_text_of_pagination(authorName)
     let currentPage = data.pagination.page
 
     if (currentPage < data.pagination.lastPage) {
@@ -232,7 +232,6 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-
 
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
