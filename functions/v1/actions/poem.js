@@ -175,7 +175,6 @@ function create_author_list(author_name, data) {
     } else {
         message = 'Página ' + pagination.page + ':'
     }
-console.log({ message, list })
     return { message, list }
 }
 
@@ -231,7 +230,7 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-
+            console.log(list)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
