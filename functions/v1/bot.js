@@ -2,16 +2,19 @@
 
 const generic = require('./actions/generic')
 const author = require('./actions/author')
-// const poem = require('./actions/poem')
+const poem = require('./actions/poem')
 const bot = require('./config/bot')
 
 bot.on('callback_query', msg => {
     let json = JSON.parse(msg.update.callback_query.data)
     msg.match = ['', json.data]
+
     if (author[json.method]) {
         return author[json.method](msg)
+    } else if (poem[json.method]) {
+        return poem[json.method](msg)
     } else {
-        msg.reply('Hubo un error al coger la información, disculpe las molestias.')
+        return msg.reply('Hubo un error al coger la información, disculpe las molestias.')
     }
 })
 
