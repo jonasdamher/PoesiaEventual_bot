@@ -8,7 +8,8 @@ const helper = require('../helpers/functions')
 module.exports = {
     discover,
     get_poem,
-    get_all_poems_of_author
+    get_all_poems_of_author,
+    send_poem_by_id
 }
 
 async function discover(msg) {
@@ -104,8 +105,6 @@ async function send_poems_of_author(msg, id) {
     return axios.get('author/poems/' + id).then(res => {
 
         let { message, list } = create_poems_list_of_author(id, res.data)
-
-
 
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
     }).catch(err => {
