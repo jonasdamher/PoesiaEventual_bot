@@ -17,7 +17,7 @@ async function discover(msg) {
 
     msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
 
-    return axios.get('poem/random').then(res => {
+    return axios.get_poem('poem/random').then(res => {
 
         let poem = res.data
         let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.name
@@ -28,7 +28,7 @@ async function discover(msg) {
     })
 }
 
-async function get(msg) {
+async function get_poem(msg) {
 
     const data = msg.match[1].trim()
 
@@ -58,7 +58,7 @@ async function get_all_poems_of_author(msg) {
 
 async function send_poem_by_id(msg, id) {
 
-    return axios.get('poem/get/' + id).then(res => {
+    return axios.get_poem('poem/get/' + id).then(res => {
 
         let poem = res.data
         return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
@@ -72,7 +72,7 @@ async function poem_search(msg, poemTitle) {
 
     let search = helper.add_params(poemTitle)
 
-    return axios.get('poem/search/' + search).then(res => {
+    return axios.get_poem('poem/search/' + search).then(res => {
 
         let { poems, pagination } = res.data
 
@@ -103,7 +103,7 @@ async function poem_search(msg, poemTitle) {
 
 async function send_poems_of_author(msg, id) {
 
-    return axios.get('author/poems/' + id).then(res => {
+    return axios.get_poem('author/poems/' + id).then(res => {
 
         let { message, list } = create_poems_list_of_author(id, res.data)
 
@@ -219,7 +219,7 @@ async function author_search(msg, author_name) {
 
     let search = helper.add_params(author_name)
 
-    return axios.get('author/search/' + search).then(res => {
+    return axios.get_poem('author/search/' + search).then(res => {
 
         let { authors, pagination } = res.data
 
