@@ -148,36 +148,33 @@ function create_poems_list(poemTitle, data) {
     return { message, list }
 }
 
-function create_author_list(authorName, data) {
+function create_author_list(author_name, data) {
+    let { authors, pagination } = data
 
-    let list = data.authors.map(author => {
+    let list = authors.map(author => {
         let json = JSON.stringify({ method: 'get_all_poems_of_author', data: author._id })
-
         return [Markup.button.callback(author.name, json)]
     })
 
-    console.log('creando lista de autores')
+    let filter_author_name = helper.filter_text_of_pagination(author_name)
 
-    let filterAuthorName = helper.filter_text_of_pagination(authorName)
-    let currentPage = data.pagination.page
+    let currentPage = pagination.page
 
-    if (currentPage < data.pagination.lastPage) {
+    if (currentPage < pagination.lastPage) {
         ++currentPage
 
-        let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
-        let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
+        let url = filter_author_name + '?perpage=' + pagination.perPage + '&page=' + currentPage
+        let messagePagination = 'Mas autores ' + pagination.page + '/' + pagination.lastPage
         let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
-        console.log('creando lista paginación')
     }
 
-    // Add message and options
     let message = ''
-    if (!authorName.includes('?perpage=')) {
-        message = 'He encontrado ' + data.pagination.total + ' coincidencias,\nquizás estas buscando:'
+    if (!poemTitle.includes('?perpage=')) {
+        message = 'He encontrado ' + pagination.total + ' coincidencias,\nquizás estas buscando:'
     } else {
-        message = 'Página ' + data.pagination.page + ':'
+        message = 'Página ' + pagination.page + ':'
     }
 
     return { message, list }
@@ -235,7 +232,7 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-            console.log('listilla')
+
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
