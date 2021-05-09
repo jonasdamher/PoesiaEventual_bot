@@ -108,7 +108,7 @@ async function send_poems_of_author(msg, id) {
 
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
     }).catch(err => {
-        return msg.reply(msg.chat.id, 'Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
+        return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
     })
 }
 
@@ -175,7 +175,7 @@ function create_author_list(author_name, data) {
     } else {
         message = 'Página ' + pagination.page + ':'
     }
-
+console.log({ message, list })
     return { message, list }
 }
 
