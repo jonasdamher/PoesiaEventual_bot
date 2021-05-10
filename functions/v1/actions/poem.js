@@ -221,7 +221,7 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-            return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
+            return msg.replyWithMarkdown(message)//, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
 
