@@ -206,7 +206,6 @@ function create_poems_list_of_author(author_id, data) {
 
 async function author_search(msg, author_name) {
 
-
     let search = helper.add_params(author_name)
 
     return axios.get('author/search/' + search).then(res => {
@@ -224,11 +223,11 @@ async function author_search(msg, author_name) {
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
-
             return msg.replyWithMarkdown('Disculpa, no se ha podido encontrar una referencia sobre *' + author_name + '*.')
         }
 
     }).catch(err => {
+        console.log(err)
         return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + author_name + '*.')
     })
 }
