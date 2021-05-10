@@ -171,7 +171,7 @@ function create_author_list(author_name, data) {
     return { message, list }
 }
 
-function create_poems_list_of_author(authorId, data) {
+function create_poems_list_of_author(author_id, data) {
 
     let list = data.poems.map(poem => {
 
@@ -180,14 +180,14 @@ function create_poems_list_of_author(authorId, data) {
         return [Markup.button.callback(poem.title, json)]
     })
 
-    let filterAuthorId = helper.filter_text_of_pagination(authorId)
+    let filter_author_id = helper.filter_text_of_pagination(author_id)
 
     let currentPage = data.pagination.page
 
     if (currentPage < data.pagination.lastPage) {
         ++currentPage
 
-        let url = filterAuthorId + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+        let url = filter_author_id + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
         let json = JSON.stringify({ method: 'get_all_poems_of_author', data: url })
 
@@ -195,7 +195,7 @@ function create_poems_list_of_author(authorId, data) {
     }
 
     let message = ''
-    if (!authorId.includes('?perpage=')) {
+    if (!author_id.includes('?perpage=')) {
         message = 'He encontrado ' + data.pagination.total + ' poemas,\nquizás estas buscando:'
     } else {
         message = 'Página ' + data.pagination.page + ':'

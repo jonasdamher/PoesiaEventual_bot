@@ -73,9 +73,9 @@ function create_authors_list(author_name, data) {
     return { message, list }
 }
 
-async function author_search(msg, authorName) {
+async function author_search(msg, author_name) {
 
-    let search = helper.add_params(authorName)
+    let search = helper.add_params(author_name)
 
     return axios.get('author/search/' + search).then(res => {
 
@@ -83,21 +83,21 @@ async function author_search(msg, authorName) {
 
         if (helper.is_data_unique(authors, pagination)) {
 
-            let authorNameOne = authors[0].name
-            return search_author_wiki(msg, authorNameOne)
+            let first_author = authors[0]
+            return search_author_wiki(msg, first_author._id)
 
         } else if (authors.length > 0) {
 
-            let { message, list } = create_authors_list(authorName, res.data)
+            let { message, list } = create_authors_list(author_name, res.data)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
 
-            return msg.replyWithMarkdown('Disculpa, no se ha podido encontrar una referencia sobre *' + authorName + '*.')
+            return msg.replyWithMarkdown('Disculpa, no se ha podido encontrar una referencia sobre *' + author_name + '*.')
         }
 
     }).catch(err => {
-        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + authorName + '*.')
+        return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + author_name + '*.')
     })
 }
 
