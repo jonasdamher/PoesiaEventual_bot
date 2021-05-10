@@ -145,7 +145,7 @@ function create_author_list(author_name, data) {
 
     let list = authors.map(author => {
         let json = JSON.stringify({ method: "get_all_poems_of_author", data: author._id })
-        return [Markup.button.callback(author.name, json)]
+        return [Markup.button.callback(author.name, 'abcd')]
     })
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
@@ -158,8 +158,7 @@ function create_author_list(author_name, data) {
         let url = filter_author_name + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + pagination.page + '/' + pagination.lastPage
         let json = JSON.stringify({ method: "get_all_poems_of_author", data: url })
-
-        list.push([Markup.button.callback(messagePagination, json)])
+        list.push([Markup.button.callback(messagePagination, 'abcd')])
     }
 
     let message = ''
