@@ -206,8 +206,9 @@ function create_poems_list_of_author(author_id, data) {
 
 async function author_search(msg, author_name) {
 
+    
     let search = helper.add_params(author_name)
-    console.log('buscando a ' + author_name)
+
     return axios.get('author/search/' + search).then(res => {
 
         let { authors, pagination } = res.data
@@ -220,7 +221,6 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-            console.log('mostrar lista de autores')
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
