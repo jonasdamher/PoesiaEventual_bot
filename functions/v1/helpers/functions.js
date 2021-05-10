@@ -1,33 +1,31 @@
 'use strict';
 
-const bot = require('../config/bot')
-
 module.exports = {
-    filterTextForPagination,
-    getDomainName,
-    isId,
-    addParams,
-    sendMessage
+    filter_text_of_pagination,
+    get_domain_name,
+    is_id,
+    add_params,
+    is_data_unique
 }
 
-function filterTextForPagination(filterPoemTitle) {
+function filter_text_of_pagination(filterPoemTitle) {
     return filterPoemTitle.includes('?perpage=') && filterPoemTitle.includes('&page=') ? filterPoemTitle.split('?')[0] : filterPoemTitle
 }
 
-function getDomainName(url) {
+function get_domain_name(url) {
     let domain = (new URL(url))
     return domain.hostname
 }
 
-function isId(id) {
+function is_id(id) {
     return id.match(/^[0-9a-fA-F]{24}$/)
 }
 
-function addParams(search) {
+function add_params(search) {
     let params = search.includes('?perpage=') && search.includes('&page=') ? search : search + '?perpage=4&page=1'
     return encodeURI(params)
 }
 
-function sendMessage(userId, message, options = { parse_mode: 'Markdown' }) {
-    bot.sendMessage(userId, message, options)
+function is_data_unique(data,pagination){
+    return data.length == 1 && pagination.page == 1 && pagination.lastPage == 1
 }
