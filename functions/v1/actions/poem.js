@@ -94,15 +94,14 @@ async function poem_search(msg, poem_title) {
 }
 
 async function send_poems_of_author(msg, author_id) {
-console.log(author_id)
+    let search = helper.add_params(author_id)
 
-    return axios.get('author/poems/' + author_id).then(res => {
-console.log('poemas encontrados')
+    return axios.get('author/poems/' + search).then(res => {
         let { message, list } = create_poems_list_of_author(author_id, res.data)
+
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
-    
+
     }).catch(err => {
-        console.log(err)
         return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
     })
 }
@@ -147,7 +146,7 @@ function create_author_list(author_name, data) {
 
     let list = authors.map(author => {
         let json = JSON.stringify({ method: "get_poems_author", data: author._id })
-         return [Markup.button.callback(author.name, json)]
+        return [Markup.button.callback(author.name, json)]
     })
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
@@ -228,7 +227,6 @@ async function author_search(msg, author_name) {
         }
 
     }).catch(err => {
-        console.log(err)
         return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre *' + author_name + '*.')
     })
 }
