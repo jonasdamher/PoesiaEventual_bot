@@ -45,9 +45,7 @@ async function send_author_by_id(msg, id) {
 
 function create_authors_list(author_name, data) {
 
-    let list = data.authors.map(author => {
-        return [Markup.button.callback(author.name, 'get_author:'+author._id)]
-    })
+    let list = data.authors.map(author =>  [Markup.button.callback(author.name, 'get_author:'+author._id)])
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
 

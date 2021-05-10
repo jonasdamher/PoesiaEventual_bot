@@ -1,5 +1,4 @@
 API_KEY_TELEGRAM=
-VERSION=v1
 URL_API=
 URL_API_WIKI=https://es.wikipedia.org/w/api.php?origin=*&format=json&utf8=&action=query&prop=extracts&exintro=&explaintext=&titles=
 URL_API_ECURED=https://www.ecured.cu/api.php?origin=*&format=json&utf8=&action=query&prop=extracts&exintro=&explaintext=&titles=
