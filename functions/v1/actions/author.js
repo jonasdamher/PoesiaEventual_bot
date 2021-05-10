@@ -43,20 +43,21 @@ async function send_author_by_id(msg, id) {
     })
 }
 
-function create_authors_list(authorName, data) {
+function create_authors_list(author_name, data) {
 
     let list = data.authors.map(author => {
         let json = JSON.stringify({ method: "get_author", data: author._id })
         return [Markup.button.callback(author.name, json)]
     })
-    let filterAuthorName = helper.filter_text_of_pagination(authorName)
+    
+    let filter_author_name = helper.filter_text_of_pagination(author_name)
 
     let currentPage = data.pagination.page
 
     if (currentPage < data.pagination.lastPage) {
         ++currentPage
 
-        let url = filterAuthorName + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
+        let url = filter_author_name + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + data.pagination.page + '/' + data.pagination.lastPage
         let json = JSON.stringify({ method: "get_author", data: url })
 
@@ -64,8 +65,8 @@ function create_authors_list(authorName, data) {
     }
 
     let message = ''
-    if (!authorName.includes('?perpage=')) {
-        message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filterAuthorName + '*,\nquizás estas buscando:'
+    if (!author_name.includes('?perpage=')) {
+        message = 'He encontrado ' + data.pagination.total + ' coincidencias relacionadas con *' + filter_author_name + '*,\nquizás estas buscando:'
     } else {
         message = 'Página ' + data.pagination.page + ':'
     }
@@ -79,15 +80,14 @@ async function author_search(msg, authorName) {
     return axios.get('author/search/' + search).then(res => {
 
         let { authors, pagination } = res.data
-         if (authors.length == 1 &&
-            pagination.page == 1 &&
-            pagination.lastPage == 1
-        ) {
+
+        if (helper.is_data_unique(authors, pagination)) {
 
             let authorNameOne = authors[0].name
             return search_author_wiki(msg, authorNameOne)
 
         } else if (authors.length > 0) {
+
             let { message, list } = create_authors_list(authorName, res.data)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 

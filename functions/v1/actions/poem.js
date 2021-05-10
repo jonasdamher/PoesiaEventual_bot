@@ -73,10 +73,7 @@ async function poem_search(msg, poemTitle) {
 
         let { poems, pagination } = res.data
 
-        if (poems.length == 1 &&
-            pagination.page == 1 &&
-            pagination.lastPage == 1
-        ) {
+        if (helper.is_data_unique(poems, pagination)) {
 
             let poem = poems[0]
             return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
@@ -215,10 +212,7 @@ async function author_search(msg, author_name) {
 
         let { authors, pagination } = res.data
 
-        if (authors.length == 1 &&
-            pagination.page == 1 &&
-            pagination.lastPage == 1
-        ) {
+        if (helper.is_data_unique(authors, pagination)) {
 
             let first_author = authors[0]
             return send_poems_of_author(msg, first_author._id)
@@ -226,9 +220,6 @@ async function author_search(msg, author_name) {
         } else if (authors.length > 0) {
 
             let { message, list } = create_author_list(author_name, res.data)
-            console.log(msg)
-            console.log(message)
-            console.log(list)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
