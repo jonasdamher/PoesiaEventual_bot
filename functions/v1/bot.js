@@ -26,7 +26,7 @@ bot.hears(/^\/autor([\s]{1,}.+[a-zA-Z-0-9])/, msg => author.get_author(msg))
 
 bot.hears(/^\/descubrir_poema$/, msg => poem.discover(msg))
 bot.hears(/^\/poema([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get_poem(msg))
-bot.hears(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get_poms_author(msg))
+bot.hears(/^\/poemas([\s]{1,}.+[a-zA-Z-0-9])/, msg => poem.get_poems_author(msg))
 
 exports.handler = async event => {
     try {

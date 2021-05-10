@@ -7,7 +7,7 @@ const helper = require('../helpers/functions')
 module.exports = {
     discover,
     get_poem,
-    get_poms_author
+    get_poems_author
 }
 
 async function discover(msg) {
@@ -38,7 +38,7 @@ async function get_poem(msg) {
     }
 }
 
-async function get_poms_author(msg) {
+async function get_poems_author(msg) {
 
     let data = msg.match[1].trim()
 
@@ -93,14 +93,15 @@ async function poem_search(msg, poem_title) {
     })
 }
 
-async function send_poems_of_author(msg, id) {
+async function send_poems_of_author(msg, author_id) {
 
-    return axios.get('author/poems/' + id).then(res => {
+    return axios.get('author/poems/' + author_id).then(res => {
 
-        let { message, list } = create_poems_list_of_author(id, res.data)
+        let { message, list } = create_poems_list_of_author(author_id, res.data)
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
     
     }).catch(err => {
+        console.log(err)
         return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
     })
 }
@@ -144,7 +145,7 @@ function create_author_list(author_name, data) {
     let { authors, pagination } = data
 
     let list = authors.map(author => {
-        let json = JSON.stringify({ method: "get_poms_author", data: author._id })
+        let json = JSON.stringify({ method: "get_poems_author", data: author._id })
          return [Markup.button.callback(author.name, json)]
     })
 
@@ -157,7 +158,7 @@ function create_author_list(author_name, data) {
 
         let url = filter_author_name + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + pagination.page + '/' + pagination.lastPage
-        let json = JSON.stringify({ method: "get_poms_author", data: url })
+        let json = JSON.stringify({ method: "get_poems_author", data: url })
         list.push([Markup.button.callback(messagePagination, json)])
     }
 
@@ -188,7 +189,7 @@ function create_poems_list_of_author(author_id, data) {
 
         let url = filter_author_id + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
-        let json = JSON.stringify({ method: "get_poms_author", data: url })
+        let json = JSON.stringify({ method: "get_poems_author", data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
     }
