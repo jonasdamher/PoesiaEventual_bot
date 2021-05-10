@@ -113,8 +113,7 @@ function create_poems_list(poemTitle, data) {
     let { poems, pagination } = data
 
     let list = poems.map(poem => {
-        let json = JSON.stringify({ method: "get_poem", data: poem._id })
-        return [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, json)]
+        return [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, 'get_poem:' + poem._id)]
     })
 
     // add pagination
@@ -127,9 +126,8 @@ function create_poems_list(poemTitle, data) {
 
         let url = filterPoemTitle + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + pagination.page + '/' + pagination.lastPage
-        let json = JSON.stringify({ method: "get_poem", data: url })
 
-        list.push([Markup.button.callback(messagePagination, json)])
+        list.push([Markup.button.callback(messagePagination, 'get_poem:' + url)])
     }
 
     let message = ''
@@ -146,8 +144,7 @@ function create_author_list(author_name, data) {
     let { authors, pagination } = data
 
     let list = authors.map(author => {
-        let json = JSON.stringify({ method: "get_poems_author", data: author._id })
-        return [Markup.button.callback(author.name, json)]
+        return [Markup.button.callback(author.name, 'get_poems_author:' + author._id)]
     })
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
@@ -159,8 +156,7 @@ function create_author_list(author_name, data) {
 
         let url = filter_author_name + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + pagination.page + '/' + pagination.lastPage
-        let json = JSON.stringify({ method: "get_poems_author", data: url })
-        list.push([Markup.button.callback(messagePagination, json)])
+        list.push([Markup.button.callback(messagePagination, 'get_poems_author:' + url)])
     }
 
     let message = ''
@@ -176,10 +172,7 @@ function create_poems_list_of_author(author_id, data) {
 
     let { poems, pagination } = data
     let list = poems.map(poem => {
-
-        let json = JSON.stringify({ method: "get_poem", data: poem._id })
-
-        return [Markup.button.callback(poem.title, json)]
+        return [Markup.button.callback(poem.title, 'get_poem:' + poem._id)]
     })
 
     let filter_author_id = helper.filter_text_of_pagination(author_id)
@@ -191,9 +184,8 @@ function create_poems_list_of_author(author_id, data) {
 
         let url = filter_author_id + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + pagination.page + '/' + pagination.lastPage
-        let json = JSON.stringify({ method: "get_poems_author", data: url })
 
-        list.push([Markup.button.callback(messagePagination, json)])
+        list.push([Markup.button.callback(messagePagination, 'get_poems_author:' + url)])
     }
 
     let message = ''
