@@ -2,10 +2,7 @@
   "name": "poesiaeventual_bot",
   "version": "1.0.0",
   "description": "Bot de Telegram para leer poesía.",
-<<<<<<< HEAD
-=======
   "main": "functions/v1/bot.js",
->>>>>>> dev
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,16 +22,9 @@
   },
   "homepage": "https://github.com/jonasdamher/PoesiaEventual_bot#readme",
   "dependencies": {
-<<<<<<< HEAD
-    "netlify-lambda": "^2.0.5"
-  },
-  "devDependencies": {}
-}
-=======
     "axios": "^0.21.1",
     "netlify-lambda": "^2.0.5",
     "telegraf": "^4.3.0"
   },
   "devDependencies": {}
 }
->>>>>>> dev
