@@ -95,13 +95,14 @@ async function poem_search(msg, poem_title) {
 
 async function send_poems_of_author(msg, author_id) {
     let search = helper.add_params(author_id)
-
+console.log('author/poems/' + search)
     return axios.get('author/poems/' + search).then(res => {
         let { message, list } = create_poems_list_of_author(author_id, res.data)
-
+console.log(message, list.length)
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
     }).catch(err => {
+        console.log(err)
         return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre los poemas.')
     })
 }
