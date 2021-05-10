@@ -7,7 +7,7 @@ const helper = require('../helpers/functions')
 module.exports = {
     discover,
     get_poem,
-    get_all_poems_of_author
+    get_poms_author
 }
 
 async function discover(msg) {
@@ -38,7 +38,7 @@ async function get_poem(msg) {
     }
 }
 
-async function get_all_poems_of_author(msg) {
+async function get_poms_author(msg) {
 
     let data = msg.match[1].trim()
 
@@ -144,8 +144,8 @@ function create_author_list(author_name, data) {
     let { authors, pagination } = data
 
     let list = authors.map(author => {
-        let json = JSON.stringify({ method: "get_all_poems_of_author", data: author._id })
-        return [Markup.button.callback(author.name, 'abcd')]
+        let json = JSON.stringify({ method: "get_poms_author", data: author._id })
+         return [Markup.button.callback(author.name, json)]
     })
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
@@ -157,8 +157,8 @@ function create_author_list(author_name, data) {
 
         let url = filter_author_name + '?perpage=' + pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas autores ' + pagination.page + '/' + pagination.lastPage
-        let json = JSON.stringify({ method: "get_all_poems_of_author", data: url })
-        list.push([Markup.button.callback(messagePagination, 'abcd')])
+        let json = JSON.stringify({ method: "get_poms_author", data: url })
+        list.push([Markup.button.callback(messagePagination, json)])
     }
 
     let message = ''
@@ -188,7 +188,7 @@ function create_poems_list_of_author(author_id, data) {
 
         let url = filter_author_id + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
         let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
-        let json = JSON.stringify({ method: "get_all_poems_of_author", data: url })
+        let json = JSON.stringify({ method: "get_poms_author", data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
     }
