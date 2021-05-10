@@ -94,9 +94,10 @@ async function poem_search(msg, poem_title) {
 }
 
 async function send_poems_of_author(msg, author_id) {
+console.log(author_id)
 
     return axios.get('author/poems/' + author_id).then(res => {
-
+console.log('poemas encontrados')
         let { message, list } = create_poems_list_of_author(author_id, res.data)
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
     
