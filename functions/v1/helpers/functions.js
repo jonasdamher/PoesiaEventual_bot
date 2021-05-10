@@ -4,7 +4,8 @@ module.exports = {
     filter_text_of_pagination,
     get_domain_name,
     is_id,
-    add_params
+    add_params,
+    is_data_unique
 }
 
 function filter_text_of_pagination(filterPoemTitle) {
@@ -23,4 +24,8 @@ function is_id(id) {
 function add_params(search) {
     let params = search.includes('?perpage=') && search.includes('&page=') ? search : search + '?perpage=4&page=1'
     return encodeURI(params)
+}
+
+function is_data_unique(data,pagination){
+    return data.length == 1 && pagination.page == 1 && pagination.lastPage == 1
 }
