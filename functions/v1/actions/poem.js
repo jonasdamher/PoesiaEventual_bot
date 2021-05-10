@@ -197,7 +197,7 @@ function create_poems_list_of_author(author_id, data) {
 
     let message = ''
     if (!author_id.includes('?perpage=')) {
-        message = 'He encontrado ' + data.pagination.total + ' poemas,\nquizás estas buscando:'
+        message = 'He encontrado ' + data.pagination.total + ' poemas:'
     } else {
         message = 'Página ' + data.pagination.page + ':'
     }

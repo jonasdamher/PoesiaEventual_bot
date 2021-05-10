@@ -84,7 +84,7 @@ async function author_search(msg, author_name) {
         if (helper.is_data_unique(authors, pagination)) {
 
             let first_author = authors[0]
-            return search_author_wiki(msg, first_author._id)
+            return search_author_wiki(msg, first_author.name)
 
         } else if (authors.length > 0) {
 
