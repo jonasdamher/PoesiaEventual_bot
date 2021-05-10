@@ -49,7 +49,7 @@ function create_authors_list(author_name, data) {
         let json = JSON.stringify({ method: "get_author", data: author._id })
         return [Markup.button.callback(author.name, json)]
     })
-    
+
     let filter_author_name = helper.filter_text_of_pagination(author_name)
 
     let currentPage = data.pagination.page

@@ -95,10 +95,10 @@ async function poem_search(msg, poem_title) {
 
 async function send_poems_of_author(msg, author_id) {
     let search = helper.add_params(author_id)
-console.log('author/poems/' + search)
+
     return axios.get('author/poems/' + search).then(res => {
         let { message, list } = create_poems_list_of_author(author_id, res.data)
-console.log(message, list.length)
+        console.log(message, list)
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
     }).catch(err => {
@@ -174,7 +174,8 @@ function create_author_list(author_name, data) {
 
 function create_poems_list_of_author(author_id, data) {
 
-    let list = data.poems.map(poem => {
+    let { poems, pagination } = data
+    let list = poems.map(poem => {
 
         let json = JSON.stringify({ method: "get_poem", data: poem._id })
 
@@ -183,13 +184,13 @@ function create_poems_list_of_author(author_id, data) {
 
     let filter_author_id = helper.filter_text_of_pagination(author_id)
 
-    let currentPage = data.pagination.page
+    let currentPage = pagination.page
 
-    if (currentPage < data.pagination.lastPage) {
+    if (currentPage < pagination.lastPage) {
         ++currentPage
 
-        let url = filter_author_id + '?perpage=' + data.pagination.perPage + '&page=' + currentPage
-        let messagePagination = 'Mas poemas ' + data.pagination.page + '/' + data.pagination.lastPage
+        let url = filter_author_id + '?perpage=' + pagination.perPage + '&page=' + currentPage
+        let messagePagination = 'Mas poemas ' + pagination.page + '/' + pagination.lastPage
         let json = JSON.stringify({ method: "get_poems_author", data: url })
 
         list.push([Markup.button.callback(messagePagination, json)])
@@ -197,9 +198,9 @@ function create_poems_list_of_author(author_id, data) {
 
     let message = ''
     if (!author_id.includes('?perpage=')) {
-        message = 'He encontrado ' + data.pagination.total + ' poemas:'
+        message = 'He encontrado ' + pagination.total + ' poemas:'
     } else {
-        message = 'Página ' + data.pagination.page + ':'
+        message = 'Página ' + pagination.page + ':'
     }
 
     return { message, list }
