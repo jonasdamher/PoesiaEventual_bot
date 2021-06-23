@@ -13,9 +13,9 @@ async function discover(msg) {
 
     msg.reply('Espera un momento...\nBuscando un autor interesante para ti.')
 
-    return axios.get('author/random').then(author => {
+    return axios.get('authors/random').then(author => {
 
-        let authorName = author.data.name
+        let authorName = author.data.data.name
         return search_author_wiki(msg, authorName)
     }).catch(err => {
 
@@ -36,8 +36,8 @@ async function get_author(msg) {
 
 async function send_author_by_id(msg, id) {
 
-    return axios.get('author/get/' + id).then(res => {
-        return search_author_wiki(msg, res.data.name)
+    return axios.get('authors/get/' + id).then(res => {
+        return search_author_wiki(msg, res.data.data.name)
     }).catch(err => {
         return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre el autor.')
     })
@@ -73,9 +73,9 @@ async function author_search(msg, author_name) {
 
     let search = helper.add_params(author_name)
 
-    return axios.get('author/search/' + search).then(res => {
+    return axios.get('authors/search/' + search).then(res => {
 
-        let { authors, pagination } = res.data
+        let { authors, pagination } = res.data.data
 
         if (helper.is_data_unique(authors, pagination)) {
 
@@ -84,7 +84,7 @@ async function author_search(msg, author_name) {
 
         } else if (authors.length > 0) {
 
-            let { message, list } = create_authors_list(author_name, res.data)
+            let { message, list } = create_authors_list(author_name, res.data.data)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
