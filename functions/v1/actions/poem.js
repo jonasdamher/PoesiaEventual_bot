@@ -14,9 +14,9 @@ async function discover(msg) {
 
     msg.reply('Espera un momento...\nBuscando un poema interesante para ti.')
 
-    return axios.get('poem/random').then(res => {
+    return axios.get('poems/random').then(res => {
 
-        let poem = res.data
+        let poem = res.data.data
         let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.name
         return msg.replyWithMarkdown(message)
 
@@ -55,9 +55,9 @@ async function get_poems_author(msg) {
 
 async function send_poem_by_id(msg, id) {
 
-    return axios.get('poem/get/' + id).then(res => {
+    return axios.get('poems/get/' + id).then(res => {
 
-        let poem = res.data
+        let poem = res.data.data
         return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
     }).catch(err => {
 
@@ -69,9 +69,9 @@ async function poem_search(msg, poem_title) {
 
     let search = helper.add_params(poem_title)
 
-    return axios.get('poem/search/' + search).then(res => {
+    return axios.get('poems/search/' + search).then(res => {
 
-        let { poems, pagination } = res.data
+        let { poems, pagination } = res.data.data
 
         if (helper.is_data_unique(poems, pagination)) {
 
@@ -80,7 +80,7 @@ async function poem_search(msg, poem_title) {
 
         } else if (poems.length > 0) {
 
-            let { message, list } = create_poems_list(poem_title, res.data)
+            let { message, list } = create_poems_list(poem_title, res.data.data)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!poems.length) {
@@ -96,8 +96,8 @@ async function poem_search(msg, poem_title) {
 async function send_poems_of_author(msg, author_id) {
     let search = helper.add_params(author_id)
 
-    return axios.get('author/poems/' + search).then(res => {
-        let { message, list } = create_poems_list_of_author(author_id, res.data)
+    return axios.get('authors/poems/' + search).then(res => {
+        let { message, list } = create_poems_list_of_author(author_id, res.data.data)
         console.log(message, list)
         return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
@@ -196,9 +196,9 @@ async function author_search(msg, author_name) {
 
     let search = helper.add_params(author_name)
 
-    return axios.get('author/search/' + search).then(res => {
+    return axios.get('authors/search/' + search).then(res => {
 
-        let { authors, pagination } = res.data
+        let { authors, pagination } = res.data.data
 
         if (helper.is_data_unique(authors, pagination)) {
 
@@ -207,7 +207,7 @@ async function author_search(msg, author_name) {
 
         } else if (authors.length > 0) {
 
-            let { message, list } = create_author_list(author_name, res.data)
+            let { message, list } = create_author_list(author_name, res.data.data)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
