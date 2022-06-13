@@ -15,8 +15,14 @@ async function discover(msg) {
 
     return axios.get('authors/random').then(author => {
 
-        let authorName = author.data.data.name
-        return search_author_wiki(msg, authorName)
+        let name = author.data.data.personal.name;
+        let lastname = author.data.data.personal.lastname;
+        let description = author.data.data.short_description;
+
+        let info = name + ' ' + lastname + '\n' + description;
+
+        return msg.reply(info);
+
     }).catch(err => {
 
         return msg.reply('Hubo un error al tratar de descubrir un autor, disculpa las molestias.')
@@ -45,7 +51,7 @@ async function send_author_by_id(msg, id) {
 
 function create_authors_list(author_name, data) {
 
-    let list = data.authors.map(author =>  [Markup.button.callback(author.name, 'get_author:'+author._id)])
+    let list = data.authors.map(author => [Markup.button.callback(author.name, 'get_author:' + author._id)])
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
 
