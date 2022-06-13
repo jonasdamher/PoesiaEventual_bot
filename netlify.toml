@@ -3,5 +3,5 @@
   command = "netlify-lambda install && mkdir ./public"
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/.netlify/functions/v2/:splat"
   status = 200
