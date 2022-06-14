@@ -2,7 +2,7 @@
   "name": "poesiaeventual_bot",
   "version": "1.0.0",
   "description": "Bot de Telegram para leer poesía.",
-  "main": "functions/v2/bot.js",
+  "main": "netlify/functions/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
