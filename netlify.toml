@@ -1,4 +1,5 @@
 [build]
+  functions = "functions/v2/"
   command = "netlify-lambda install && mkdir ./public"
 [[redirects]]
   from = "/*"
