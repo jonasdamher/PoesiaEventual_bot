@@ -3,7 +3,5 @@
   command = "netlify-lambda install && mkdir ./public"
 [[redirects]]
   from = "/*"
-  to = "/.netlify/functions/v2/:splat"
   status = 200
-[functions]
-  directory = "functions/v2/"
+ 
