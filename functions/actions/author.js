@@ -15,11 +15,11 @@ async function discover(msg) {
 
     return axios.get('authors/random').then(author => {
 
-        const name = author.data.personal.name;
-        const lastname = author.data.personal.lastname;
-        const description = author.data.short_description;
+        let name = author.data.data.personal.name;
+        let lastname = author.data.data.personal.lastname;
+        let description = author.data.data.short_description;
 
-        const info = name + ' ' + lastname + '\n' + description;
+        let info = name + ' ' + lastname + '\n' + description;
 
         return msg.reply(info);
 
