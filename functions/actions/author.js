@@ -42,8 +42,15 @@ async function get_author(msg) {
 
 async function send_author_by_id(msg, id) {
 
-    return axios.get('authors/get/' + id).then(res => {
-        return search_author_wiki(msg, res.data.data.name)
+    return axios.get('authors/get/' + id).then(author => {
+
+        let name = author.data.result.personal.name;
+        let lastname = author.data.result.personal.lastname;
+        let description = author.data.result.short_description;
+
+        let info = name + ' ' + lastname + '\n' + description;
+        return msg.reply(info);
+
     }).catch(err => {
         return msg.replyWithMarkdown('Disculpa, hubo un error al tratar de encontrar una referencia sobre el autor.')
     })
@@ -51,7 +58,7 @@ async function send_author_by_id(msg, id) {
 
 function create_authors_list(author_name, data) {
 
-    let list = data.authors.map(author => [Markup.button.callback(author.name, 'get_author:' + author._id)])
+    let list = data.authors.map(author => [Markup.button.callback(author.personal.name, 'get_author:' + author._id)])
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
 
@@ -81,16 +88,21 @@ async function author_search(msg, author_name) {
 
     return axios.get('authors/search/' + search).then(res => {
 
-        let { authors, pagination } = res.data.data
+        let { authors, pagination } = res.data.result
 
         if (helper.is_data_unique(authors, pagination)) {
 
-            let first_author = authors[0]
-            return search_author_wiki(msg, first_author.name)
+            let first_author = authors.result[0]
+            let name = first_author.personal.name;
+            let lastname = first_author.personal.lastname;
+            let description = first_author.short_description;
+
+            let info = name + ' ' + lastname + '\n' + description;
+            return msg.reply(info);
 
         } else if (authors.length > 0) {
 
-            let { message, list } = create_authors_list(author_name, res.data.data)
+            let { message, list } = create_authors_list(author_name, res.data.result)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
