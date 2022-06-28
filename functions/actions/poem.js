@@ -16,8 +16,8 @@ async function discover(msg) {
 
     return axios.get('poems/random').then(res => {
 
-        let poem = res.data.data
-        let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.name
+        let poem = res.data.result
+        let message = '*' + poem.title + '*\n' + poem.text + '\nAutor: ' + poem.author.personal.name+' '+poem.author.personal.lastname
         return msg.replyWithMarkdown(message)
 
     }).catch(err => {
