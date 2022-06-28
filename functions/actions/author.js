@@ -92,7 +92,7 @@ async function author_search(msg, author_name) {
 
         if (helper.is_data_unique(authors, pagination)) {
 
-            let first_author = authors.result[0]
+            let first_author = authors[0]
             let name = first_author.personal.name;
             let lastname = first_author.personal.lastname;
             let description = first_author.short_description;
