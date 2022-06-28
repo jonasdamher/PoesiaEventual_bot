@@ -71,16 +71,16 @@ async function poem_search(msg, poem_title) {
 
     return axios.get('poems/search/' + search).then(res => {
 
-        let { poems, pagination } = res.data.data
+        let { poems, pagination } = res.data.result
 
         if (helper.is_data_unique(poems, pagination)) {
 
             let poem = poems[0]
-            return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
+            return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.personal.name + '_')
 
         } else if (poems.length > 0) {
 
-            let { message, list } = create_poems_list(poem_title, res.data.data)
+            let { message, list } = create_poems_list(poem_title, res.data.result)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!poems.length) {
@@ -112,7 +112,7 @@ function create_poems_list(poemTitle, data) {
     // add poems
     let { poems, pagination } = data
 
-    let list = poems.map(poem => [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.name, 'get_poem:' + poem._id)])
+    let list = poems.map(poem => [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.personal.name, 'get_poem:' + poem._id)])
 
     // add pagination
     let filterPoemTitle = helper.filter_text_of_pagination(poemTitle)
@@ -141,7 +141,7 @@ function create_poems_list(poemTitle, data) {
 function create_author_list(author_name, data) {
     let { authors, pagination } = data
 
-    let list = authors.map(author => [Markup.button.callback(author.name, 'get_poems_author:' + author._id)])
+    let list = authors.map(author => [Markup.button.callback(author.personal.name, 'get_poems_author:' + author._id)])
 
     let filter_author_name = helper.filter_text_of_pagination(author_name)
 
@@ -198,7 +198,7 @@ async function author_search(msg, author_name) {
 
     return axios.get('authors/search/' + search).then(res => {
 
-        let { authors, pagination } = res.data.data
+        let { authors, pagination } = res.data.result
 
         if (helper.is_data_unique(authors, pagination)) {
 
@@ -207,7 +207,7 @@ async function author_search(msg, author_name) {
 
         } else if (authors.length > 0) {
 
-            let { message, list } = create_author_list(author_name, res.data.data)
+            let { message, list } = create_author_list(author_name, res.data.result)
             return msg.replyWithMarkdown(message, Markup.inlineKeyboard(list))
 
         } else if (!authors.length) {
