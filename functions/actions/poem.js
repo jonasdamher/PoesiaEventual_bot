@@ -55,10 +55,10 @@ async function get_poems_author(msg) {
 
 async function send_poem_by_id(msg, id) {
 
-    return axios.get('poems/get/' + id).then(res => {
+    return axios.get('poems/' + id).then(res => {
 
-        let poem = res.data.data
-        return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.name + '_')
+        let poem = res.data.result
+        return msg.replyWithMarkdown('*' + poem.title + '*\n' + poem.text + '\n_Autor: ' + poem.author.personal.name + '_')
     }).catch(err => {
 
         return msg.reply('Disculpa, hubo un error al tratar de encontrar una referencia sobre el título.')
