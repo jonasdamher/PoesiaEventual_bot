@@ -112,7 +112,7 @@ function create_poems_list(poemTitle, data) {
     // add poems
     let { poems, pagination } = data
 
-    let list = poems.map(poem => [Markup.button.callback(poem.title + '\n' + 'Autor: ' + poem.author.personal.name, 'get_poem:' + poem._id)])
+    let list = poems.map(poem => [Markup.button.callback(poem.title + ' - ' + poem.author.personal.name+' '+ poem.author.personal.lastname, 'get_poem:' + poem._id)])
 
     // add pagination
     let filterPoemTitle = helper.filter_text_of_pagination(poemTitle)
